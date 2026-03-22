@@ -6,6 +6,8 @@ import TestimonialQuote from "@/components/TestimonialQuote";
 import AffiliateBlock from "@/components/AffiliateBlock";
 import LeadForm from "@/components/LeadForm";
 import FloatingCTA from "@/components/FloatingCTA";
+import CompareButton from "@/components/CompareButton";
+import FloatingCompareBar from "@/components/FloatingCompareBar";
 
 // ISR: revalidate every 24 hours
 export const revalidate = 86400;
@@ -31,7 +33,7 @@ export async function generateMetadata({ params }) {
       openGraph: {
         title: `${program.name} | StudyGoda`,
         description: `週費 $${program.weekly_fee_usd} USD · ${program.course_type} · ${program.city}`,
-        images: program.photo_url ? [{ url: program.photo_url }] : [],
+        images: [{ url: `/api/og/${slug}`, width: 1200, height: 630 }],
       },
     };
   } catch {
@@ -133,10 +135,11 @@ export default async function ProgramDetailPage({ params }) {
                 border: "1px solid var(--color-border)",
               }}
             >
-              <div className="flex items-baseline gap-2 mb-4">
+              <div className="flex items-center justify-between gap-4 mb-4">
                 <span className={`font-mono font-semibold text-[32px] ${feeClass}`}>
                   {formatUSD(program.weekly_fee_usd)}/週
                 </span>
+                <CompareButton slug={slug} size="md" />
               </div>
 
               <div className="grid grid-cols-2 gap-4 text-sm">
@@ -293,6 +296,7 @@ export default async function ProgramDetailPage({ params }) {
 
       {/* Mobile floating CTA */}
       <FloatingCTA />
+      <FloatingCompareBar />
     </>
   );
 }

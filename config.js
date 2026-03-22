@@ -50,10 +50,27 @@ const config = {
       "https://www.skyscanner.com.tw/transport/flights/tpe/ceb/",
   },
 
+  // Exchange rate (static, no external API dependency)
+  exchangeRate: {
+    usdToTwd: 31,
+    disclaimer: "參考匯率",
+    updatedAt: "2026-03-22",
+  },
+
+  // Compare feature
+  compare: {
+    maxItems: 3,
+  },
+
   // Resend email config
   resend: {
     fromNoReply: "StudyGoda <noreply@studygoda.com>",
     fromAdmin: "StudyGoda <hello@studygoda.com>",
+  },
+
+  // LINE notification config
+  line: {
+    pushApiUrl: "https://api.line.me/v2/bot/message/push",
   },
 
   // Navigation

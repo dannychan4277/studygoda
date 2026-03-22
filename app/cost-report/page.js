@@ -185,18 +185,18 @@ export default async function CostReportPage() {
         {/* CTAs */}
         <section className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
-            href="/search"
+            href="/calculator"
             className="px-8 py-3 rounded-full font-display font-semibold text-sm text-center min-h-[44px] flex items-center justify-center"
             style={{ backgroundColor: "var(--color-accent)", color: "white" }}
           >
-            找到最適合你的 →
+            用計算機算出你的預算 →
           </Link>
           <Link
-            href="/packs"
+            href="/search"
             className="px-8 py-3 rounded-full font-display font-semibold text-sm text-center min-h-[44px] flex items-center justify-center"
             style={{ border: "1px solid var(--color-border)", color: "var(--color-text)" }}
           >
-            看遊學懶人包
+            找到最適合你的 →
           </Link>
         </section>
       </div>

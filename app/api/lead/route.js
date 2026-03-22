@@ -113,6 +113,27 @@ export async function POST(request) {
         });
     }
 
+    // Async LINE notification (non-blocking, fail-open)
+    const lineToken = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+    const lineUserId = process.env.LINE_ADMIN_USER_ID;
+
+    if (lineToken && lineUserId) {
+      import("@/libs/line").then(({ sendLinePushMessage, buildLeadFlexMessage }) => {
+        const flexMsg = buildLeadFlexMessage({
+          name,
+          email,
+          phone: phone || null,
+          preferredWeeks: preferred_weeks,
+          programName: program_id || null,
+        });
+        sendLinePushMessage(lineUserId, flexMsg).catch((err) => {
+          console.error("LINE notification failed:", err);
+        });
+      }).catch((err) => {
+        console.error("LINE module import failed:", err);
+      });
+    }
+
     return NextResponse.json({ status: "success", id: lead.id }, { status: 201 });
   } catch (error) {
     console.error("Lead API error:", error);
