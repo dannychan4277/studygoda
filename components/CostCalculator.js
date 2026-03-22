@@ -167,8 +167,7 @@ export default function CostCalculator({ programs, cityGuides }) {
               max={maxWeeks}
               value={effectiveWeeks}
               onChange={(e) => setWeeks(Number(e.target.value))}
-              className="flex-1"
-              style={{ accentColor: "var(--color-primary)" }}
+              className="flex-1 accent-[var(--color-primary)]"
             />
             <span
               className="font-mono font-semibold text-lg min-w-[3rem] text-right"
