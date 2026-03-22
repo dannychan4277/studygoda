@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@theme {
+  /* Typography */
+  --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+
+  /* Colors - Primary (deep teal-green) */
+  --color-primary: #1A6B5A;
+  --color-primary-light: #238C75;
+  --color-primary-dark: #0F4D3F;
+
+  /* Colors - Accent (warm coral) */
+  --color-accent: #E07A5F;
+  --color-accent-light: #E8967F;
+  --color-accent-dark: #C45E43;
+
+  /* Colors - Neutrals (warm) */
+  --color-surface: #FAFAF5;
+  --color-elevated: #FFFFFF;
+  --color-sunken: #F0F0EB;
+  --color-text: #1A1A2E;
+  --color-text-secondary: #5A5A6E;
+  --color-text-muted: #8A8A9A;
+  --color-border: #E0E0D8;
+
+  /* Colors - Semantic */
+  --color-success: #2D8B55;
+  --color-warning: #D4930D;
+  --color-error: #C44536;
+  --color-info: #2D6B8B;
+
+  /* Fee color encoding */
+  --color-fee-budget: #2D8B55;
+  --color-fee-mid: #D4930D;
+  --color-fee-premium: #E07A5F;
+
+  /* Spacing */
+  --spacing-2xs: 2px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* Border radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Animations */
+  --animate-ken-burns: ken-burns 10s ease-in-out infinite alternate;
+  --animate-count-up: count-up 1s ease-out;
+  --animate-shimmer: shimmer 1.5s ease-in-out infinite;
+
+  @keyframes ken-burns {
+    0% { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.08) translate(-1%, -1%); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Display font utility */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Fee color encoding */
+.fee-budget { color: var(--color-fee-budget); }
+.fee-mid { color: var(--color-fee-mid); }
+.fee-premium { color: var(--color-fee-premium); }
+
+/* Section rhythm backgrounds */
+.bg-surface { background-color: var(--color-surface); }
+.bg-elevated { background-color: var(--color-elevated); }
+.bg-teal-section {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(90deg, var(--color-sunken) 25%, var(--color-border) 50%, var(--color-sunken) 75%);
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: var(--radius-md);
+}
+
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--color-primary);
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Bottom tab bar spacing on mobile */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 64px;
+  }
+}
