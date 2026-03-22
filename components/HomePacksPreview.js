@@ -7,7 +7,7 @@ export default async function HomePacksPreview() {
   let packs = [];
   try {
     const allPacks = await getLazyPacks();
-    packs = allPacks?.slice(0, 3) || [];
+    packs = allPacks?.slice(0, 8) || [];
   } catch {
     // Silently handle — show empty section
   }
@@ -30,15 +30,15 @@ export default async function HomePacksPreview() {
           不知道怎麼選？我們幫你配好了。
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {packs.map((pack, i) => (
             <div
               key={pack.id}
               style={{
-                animationDelay: `${i * 0.1}s`,
+                animationDelay: `${i * 0.08}s`,
               }}
             >
-              <LazyPackCard pack={pack} />
+              <LazyPackCard pack={pack} variant="landscape" />
             </div>
           ))}
         </div>

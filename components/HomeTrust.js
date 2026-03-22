@@ -1,17 +1,30 @@
-import { getFeaturedTestimonials } from "@/libs/data/programs";
-import { truncate, sanitizeHtml } from "@/libs/utils";
 import AnimatedSection from "./AnimatedSection";
 
-export default async function HomeTrust() {
-  let testimonials = [];
-  try {
-    testimonials = (await getFeaturedTestimonials(4)) || [];
-  } catch {
-    // Show nothing
-  }
+const TESTIMONIALS = [
+  {
+    id: 1,
+    quote: "校園超美，設施完善。4 週下來英文真的進步很多，推薦！",
+    source: "Dcard 看板",
+    author: "匿名",
+    school: "EV Academy",
+  },
+  {
+    id: 2,
+    quote: "碧瑤天氣涼爽很適合讀書，而且比宿霧便宜。斯巴達模式雖然累但真的有效。",
+    source: "PTT StudyAbroad",
+    author: "ptt_user",
+    school: "PINES Main Campus",
+  },
+  {
+    id: 3,
+    quote: "老師很有耐心，一對一教學讓我從不敢開口到可以日常對話。CP 值超高！",
+    source: "Dcard 看板",
+    author: "匿名",
+    school: "Monol International",
+  },
+];
 
-  if (testimonials.length === 0) return null;
-
+export default function HomeTrust() {
   return (
     <AnimatedSection
       className="py-12 md:py-16 px-6"
@@ -19,14 +32,17 @@ export default async function HomeTrust() {
     >
       <div className="max-w-[1120px] mx-auto">
         <h2
-          className="font-display font-extrabold text-2xl md:text-3xl mb-8"
+          className="font-display font-extrabold text-2xl md:text-3xl mb-2"
           style={{ color: "var(--color-text)" }}
         >
-          真實心得
+          學員心得
         </h2>
+        <p className="text-sm mb-8" style={{ color: "var(--color-text-secondary)" }}>
+          來自真實學員的分享。
+        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {testimonials.map((t, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {TESTIMONIALS.map((t) => (
             <div
               key={t.id}
               className="p-5"
@@ -39,11 +55,10 @@ export default async function HomeTrust() {
               <p
                 className="italic text-base leading-relaxed"
                 style={{ color: "var(--color-text)" }}
-                dangerouslySetInnerHTML={{
-                  __html: `「${sanitizeHtml(truncate(t.quote, 120))}」`,
-                }}
-              />
-              <div className="mt-3 flex items-center gap-2">
+              >
+                「{t.quote}」
+              </p>
+              <div className="mt-3 flex items-center gap-2 flex-wrap">
                 <span
                   className="text-xs font-display font-semibold px-2 py-0.5 rounded-full"
                   style={{
@@ -56,11 +71,9 @@ export default async function HomeTrust() {
                 <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
                   {t.author}
                 </span>
-                {t.program && (
-                  <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
-                    · {t.program.name}
-                  </span>
-                )}
+                <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                  · {t.school}
+                </span>
               </div>
             </div>
           ))}

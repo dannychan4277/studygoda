@@ -166,6 +166,43 @@ export async function getFeaturedTestimonials(limit = 4) {
 }
 
 /**
+ * Get top 6 featured programs by recommendation score
+ */
+export async function getFeaturedPrograms(limit = 6) {
+  const programs = await getAllPrograms();
+  if (!programs) return [];
+
+  return programs
+    .map((p) => ({
+      ...p,
+      score: (p.google_rating || 0) * 0.6 + (1 - (p.weekly_fee_usd || 300) / 500) * 0.4,
+    }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit);
+}
+
+/**
+ * Get per-city aggregated stats (school count + avg fee)
+ */
+export async function getCityStats() {
+  const programs = await getAllPrograms();
+  if (!programs) return [];
+
+  const cityMap = {};
+  for (const p of programs) {
+    if (!cityMap[p.city]) cityMap[p.city] = { city: p.city, count: 0, totalFee: 0 };
+    cityMap[p.city].count++;
+    cityMap[p.city].totalFee += p.weekly_fee_usd || 0;
+  }
+
+  return Object.values(cityMap).map((c) => ({
+    city: c.city,
+    schoolCount: c.count,
+    avgFee: Math.round(c.totalFee / c.count),
+  }));
+}
+
+/**
  * Get aggregate stats (for homepage)
  */
 export async function getStats() {
