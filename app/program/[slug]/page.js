@@ -91,7 +91,7 @@ export default async function ProgramDetailPage({ params }) {
       {/* Hero photo */}
       <div className="relative w-full" style={{ height: "45vh", minHeight: "300px" }}>
         <Image
-          src={program.photo_url || "https://images.unsplash.com/photo-1523050854058-8df90110c476?w=1920"}
+          src={program.photo_url || "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1920"}
           alt={program.name}
           fill
           className="object-cover"

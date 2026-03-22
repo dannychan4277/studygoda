@@ -20,7 +20,7 @@ export default function LazyPackCard({ pack, variant = "default" }) {
         }
       >
         <Image
-          src={pack.photo_url || "https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800"}
+          src={pack.photo_url || "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800"}
           alt={pack.title}
           fill
           className="object-cover"

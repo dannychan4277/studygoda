@@ -181,7 +181,7 @@ export default function CompareTable({ programs, cityGuides }) {
                   <Image
                     src={
                       p.photo_url ||
-                      "https://images.unsplash.com/photo-1523050854058-8df90110c476?w=800"
+                      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800"
                     }
                     alt={p.name}
                     fill

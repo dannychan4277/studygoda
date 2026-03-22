@@ -35,7 +35,7 @@ export default function HeroSection() {
           loop
           playsInline
           onError={() => setVideoFailed(true)}
-          poster="https://images.unsplash.com/photo-1523050854058-8df90110c476?w=1920&q=80"
+          poster="https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1920&q=80"
         >
           {/* Video source would go here — using poster as fallback */}
         </video>
@@ -44,7 +44,7 @@ export default function HeroSection() {
           className="absolute inset-0 w-full h-full bg-cover bg-center"
           style={{
             backgroundImage:
-              'url("https://images.unsplash.com/photo-1523050854058-8df90110c476?w=1920&q=80")',
+              'url("https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=1920&q=80")',
             animation: "ken-burns 10s ease-in-out infinite alternate",
           }}
         />
