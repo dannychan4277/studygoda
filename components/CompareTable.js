@@ -146,14 +146,24 @@ export default function CompareTable({ programs, cityGuides }) {
   ];
 
   return (
-    <div
-      className="overflow-x-auto"
-      style={{
-        backgroundColor: "var(--color-elevated)",
-        borderRadius: "var(--radius-lg)",
-        border: "1px solid var(--color-border)",
-      }}
-    >
+    <div>
+      {/* Mobile scroll hint */}
+      {programs.length > 1 && (
+        <p
+          className="text-xs mb-2 sm:hidden text-center"
+          style={{ color: "var(--color-text-muted)" }}
+        >
+          ← 左右滑動比較 →
+        </p>
+      )}
+      <div
+        className="overflow-x-auto"
+        style={{
+          backgroundColor: "var(--color-elevated)",
+          borderRadius: "var(--radius-lg)",
+          border: "1px solid var(--color-border)",
+        }}
+      >
       <table className="w-full min-w-[640px]">
         <thead>
           <tr>
@@ -243,6 +253,7 @@ export default function CompareTable({ programs, cityGuides }) {
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
   );
 }
