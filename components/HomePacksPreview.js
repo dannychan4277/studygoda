@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getLazyPacks } from "@/libs/data/programs";
 import LazyPackCard from "./LazyPackCard";
 import AnimatedSection from "./AnimatedSection";
+import CarouselArrows from "./CarouselArrows";
 
 export default async function HomePacksPreview() {
   let packs = [];
@@ -17,43 +18,52 @@ export default async function HomePacksPreview() {
   return (
     <AnimatedSection
       className="py-12 md:py-16 px-6"
-      style={{ backgroundColor: "var(--color-surface)" }}
+      style={{ backgroundColor: "#FFFFFF" }}
     >
       <div className="max-w-[1120px] mx-auto">
-        <h2
-          className="font-display font-extrabold text-2xl md:text-3xl mb-2"
-          style={{ color: "var(--color-text)" }}
-        >
-          遊學懶人包
-        </h2>
-        <p className="text-sm mb-8" style={{ color: "var(--color-text-secondary)" }}>
-          不知道怎麼選？我們幫你配好了。
-        </p>
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <h2
+              className="font-display font-bold text-[28px] mb-2"
+              style={{ color: "var(--color-text)" }}
+            >
+              遊學懶人包
+            </h2>
+            <p className="text-[14px]" style={{ color: "var(--color-text-secondary)" }}>
+              不知道怎麼選？我們幫你配好了。
+            </p>
+          </div>
+          <CarouselArrows targetId="packs-carousel" />
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {packs.map((pack, i) => (
+        <div
+          id="packs-carousel"
+          className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory"
+          style={{ scrollbarWidth: "none" }}
+        >
+          {packs.map((pack) => (
             <div
               key={pack.id}
-              style={{
-                animationDelay: `${i * 0.08}s`,
-              }}
+              className="flex-shrink-0 w-[340px] md:w-[400px] snap-start"
             >
               <LazyPackCard pack={pack} variant="landscape" />
             </div>
           ))}
-        </div>
 
-        <div className="mt-8 text-center">
-          <Link
-            href="/packs"
-            className="inline-flex items-center gap-2 font-display font-semibold text-sm px-6 py-3 rounded-full transition-all"
-            style={{
-              backgroundColor: "var(--color-accent)",
-              color: "white",
-            }}
-          >
-            看全部懶人包 →
-          </Link>
+          {/* CTA card at the end */}
+          <div className="flex-shrink-0 w-[340px] md:w-[400px] snap-start">
+            <Link
+              href="/packs"
+              className="flex items-center justify-center h-full min-h-[180px] font-display font-semibold text-[16px] transition-colors"
+              style={{
+                borderRadius: "16px",
+                border: "2px dashed var(--color-border)",
+                color: "var(--color-primary)",
+              }}
+            >
+              看全部懶人包 →
+            </Link>
+          </div>
         </div>
       </div>
     </AnimatedSection>

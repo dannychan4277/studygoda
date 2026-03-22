@@ -6,24 +6,24 @@
   --font-mono: "Geist Mono", ui-monospace, monospace;
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
 
-  /* Colors - Primary (deep teal-green) */
-  --color-primary: #1A6B5A;
-  --color-primary-light: #238C75;
-  --color-primary-dark: #0F4D3F;
+  /* Colors - Primary (deep ocean blue) */
+  --color-primary: #1B4965;
+  --color-primary-light: #2D6A8F;
+  --color-primary-dark: #0F3347;
 
-  /* Colors - Accent (warm coral) */
-  --color-accent: #E07A5F;
-  --color-accent-light: #E8967F;
-  --color-accent-dark: #C45E43;
+  /* Colors - Accent (vibrant orange) */
+  --color-accent: #FF6B35;
+  --color-accent-light: #FF8A5C;
+  --color-accent-dark: #E05A25;
 
-  /* Colors - Neutrals (warm) */
-  --color-surface: #FAFAF5;
+  /* Colors - Neutrals (neutral, clean) */
+  --color-surface: #F5F5F5;
   --color-elevated: #FFFFFF;
-  --color-sunken: #F0F0EB;
-  --color-text: #1A1A2E;
-  --color-text-secondary: #5A5A6E;
-  --color-text-muted: #8A8A9A;
-  --color-border: #E0E0D8;
+  --color-sunken: #EBEBEB;
+  --color-text: #1A1A1A;
+  --color-text-secondary: #6B7280;
+  --color-text-muted: #9CA3AF;
+  --color-border: #E5E7EB;
 
   /* Colors - Semantic */
   --color-success: #2D8B55;
@@ -34,7 +34,7 @@
   /* Fee color encoding */
   --color-fee-budget: #2D8B55;
   --color-fee-mid: #D4930D;
-  --color-fee-premium: #E07A5F;
+  --color-fee-premium: #FF6B35;
 
   /* Spacing */
   --spacing-2xs: 2px;
@@ -76,7 +76,8 @@ html {
 body {
   font-family: var(--font-body);
   color: var(--color-text);
-  background-color: var(--color-surface);
+  background-color: #FFFFFF;
+  line-height: 1.8;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

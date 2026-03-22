@@ -1,51 +1,50 @@
-import HeroSection from "@/components/HeroSection";
-import HomeStats from "@/components/HomeStats";
+import HomeSearch from "@/components/HomeSearch";
+import HomeCities from "@/components/HomeCities";
 import HomeFeatured from "@/components/HomeFeatured";
+import HomeFeeBars from "@/components/HomeFeeBars";
 import HomePacksPreview from "@/components/HomePacksPreview";
 import HomeCalculatorCTA from "@/components/HomeCalculatorCTA";
-import HomeCities from "@/components/HomeCities";
 import HomeTrust from "@/components/HomeTrust";
 import HomeFAQ from "@/components/HomeFAQ";
 import HomeFooter from "@/components/HomeFooter";
-import { getFeaturedPrograms, getCityStats } from "@/libs/data/programs";
+import { getFeaturedPrograms, getCityStats, getStats } from "@/libs/data/programs";
 
-// Force dynamic rendering so Supabase data is fetched at request time
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  // Fetch data for sections in parallel
-  const [featuredPrograms, cityStats] = await Promise.all([
+  const [featuredPrograms, cityStats, stats] = await Promise.all([
     getFeaturedPrograms(6).catch(() => []),
     getCityStats().catch(() => []),
+    getStats().catch(() => ({ schoolCount: 31 })),
   ]);
 
   return (
     <>
-      {/* S1: Hero (white bg) — 情緒鉤子 */}
-      <HeroSection />
+      {/* S1: Search area (white) — replaces hero */}
+      <HomeSearch schoolCount={stats.schoolCount} />
 
-      {/* S2: Stats Bar (teal bg) — 信任數字 */}
-      <HomeStats />
-
-      {/* S3: 熱門學校 (surface bg) — 探索 */}
-      <HomeFeatured programs={featuredPrograms} />
-
-      {/* S4: 懶人包 (white bg) — 探索 */}
-      <HomePacksPreview />
-
-      {/* S5: 費用計算 CTA (teal bg) — 行動 */}
-      <HomeCalculatorCTA />
-
-      {/* S6: 城市探索 (surface bg) — 探索 */}
+      {/* S2: City photo cards (white) */}
       <HomeCities cityStats={cityStats} />
 
-      {/* S7: 學員心得 (white bg) — 信任 */}
+      {/* S3: Featured schools carousel (surface) */}
+      <HomeFeatured programs={featuredPrograms} />
+
+      {/* S4: Fee quick compare (surface) */}
+      <HomeFeeBars cityStats={cityStats} />
+
+      {/* S5: Lazy packs carousel (white) */}
+      <HomePacksPreview />
+
+      {/* S6: Calculator CTA (primary bg) */}
+      <HomeCalculatorCTA />
+
+      {/* S7: Testimonials (white) */}
       <HomeTrust />
 
-      {/* S8: FAQ (surface bg) — 行動 */}
+      {/* S8: FAQ (surface) */}
       <HomeFAQ />
 
-      {/* S9: 最終 CTA (teal bg) + Footer (dark bg) */}
+      {/* S9: Final CTA + Footer */}
       <HomeFooter />
     </>
   );

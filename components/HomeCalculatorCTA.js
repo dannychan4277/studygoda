@@ -8,7 +8,7 @@ export default function HomeCalculatorCTA() {
       style={{ backgroundColor: "var(--color-primary)", color: "white" }}
     >
       <div className="max-w-[1120px] mx-auto text-center">
-        <h2 className="font-display font-extrabold text-2xl md:text-4xl mb-4">
+        <h2 className="font-display font-bold text-[28px] md:text-[36px] mb-4">
           算算你的遊學預算
         </h2>
         <p className="text-base md:text-lg opacity-80 mb-8 max-w-md mx-auto">

@@ -40,12 +40,12 @@ export default function HomeFAQ() {
     >
       <div className="max-w-[720px] mx-auto">
         <h2
-          className="font-display font-extrabold text-2xl md:text-3xl mb-2"
+          className="font-display font-bold text-[28px] mb-2"
           style={{ color: "var(--color-text)" }}
         >
           第一次遊學？你可能想知道...
         </h2>
-        <p className="text-sm mb-8" style={{ color: "var(--color-text-secondary)" }}>
+        <p className="text-[14px] mb-8" style={{ color: "var(--color-text-secondary)" }}>
           最常被問到的 6 個問題。
         </p>
 

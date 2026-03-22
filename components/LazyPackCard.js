@@ -83,17 +83,16 @@ export default function LazyPackCard({ pack, variant = "default" }) {
       href={programSlug ? `/program/${programSlug}` : "/packs"}
       className={className}
       style={{
-        borderRadius: "var(--radius-md)",
+        borderRadius: "16px",
         backgroundColor: "var(--color-elevated)",
-        border: "1px solid var(--color-border)",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+        transition: "box-shadow 200ms ease",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-4px) scale(1.02)";
-        e.currentTarget.style.boxShadow = "0 12px 40px rgba(0,0,0,0.1)";
+        e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.12)";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0) scale(1)";
-        e.currentTarget.style.boxShadow = "none";
+        e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
       }}
     >
       {content}

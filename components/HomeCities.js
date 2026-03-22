@@ -17,18 +17,15 @@ export default function HomeCities({ cityStats }) {
   if (!cityStats || cityStats.length === 0) return null;
 
   return (
-    <AnimatedSection
-      className="py-12 md:py-16 px-6"
-      style={{ backgroundColor: "var(--color-surface)" }}
-    >
+    <AnimatedSection className="py-12 md:py-16 px-6" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="max-w-[1120px] mx-auto">
         <h2
-          className="font-display font-extrabold text-2xl md:text-3xl mb-2"
+          className="font-display font-bold text-[28px] mb-2"
           style={{ color: "var(--color-text)" }}
         >
           探索城市
         </h2>
-        <p className="text-sm mb-8" style={{ color: "var(--color-text-secondary)" }}>
+        <p className="text-[14px] mb-8" style={{ color: "var(--color-text-secondary)" }}>
           每個城市都有不同的學習氛圍和生活步調。
         </p>
 
@@ -37,14 +34,22 @@ export default function HomeCities({ cityStats }) {
             <Link
               key={cs.city}
               href={`/search?city=${cs.city}`}
-              className="group block overflow-hidden transition-transform hover:-translate-y-1"
+              className="group block overflow-hidden"
               style={{
-                borderRadius: "var(--radius-lg)",
-                border: "1px solid var(--color-border)",
+                borderRadius: "16px",
                 backgroundColor: "var(--color-elevated)",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+                transition: "box-shadow 200ms ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.12)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
               }}
             >
-              <div className="relative aspect-[4/3] overflow-hidden">
+              {/* Photo above — NOT overlaid */}
+              <div className="relative aspect-[4/3] overflow-hidden" style={{ borderRadius: "16px 16px 0 0" }}>
                 <Image
                   src={CITY_PHOTOS[cs.city] || CITY_PHOTOS.Cebu}
                   alt={config.cityNames[cs.city] || cs.city}
@@ -52,27 +57,17 @@ export default function HomeCities({ cityStats }) {
                   className="object-cover transition-transform group-hover:scale-105"
                   sizes="(max-width: 768px) 50vw, 25vw"
                 />
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background: "linear-gradient(180deg, transparent 40%, rgba(26,26,46,0.7) 100%)",
-                  }}
-                />
-                <div className="absolute bottom-3 left-3 right-3">
-                  <h3 className="font-display font-bold text-lg text-white">
-                    {config.cityNames[cs.city] || cs.city}
-                  </h3>
-                </div>
               </div>
-              <div className="p-3">
-                <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+              {/* Text below */}
+              <div className="p-4">
+                <h3 className="font-display font-semibold text-[16px]" style={{ color: "var(--color-text)" }}>
+                  {config.cityNames[cs.city] || cs.city}
+                </h3>
+                <p className="text-[14px] mt-1" style={{ color: "var(--color-text-secondary)" }}>
                   {cs.schoolCount} 間學校
                 </p>
-                <p
-                  className="font-mono font-semibold text-sm mt-1"
-                  style={{ color: "var(--color-text)" }}
-                >
-                  平均 {formatUSD(cs.avgFee)}/週
+                <p className="font-mono font-semibold text-[14px] mt-1" style={{ color: "var(--color-text)" }}>
+                  {formatUSD(cs.avgFee)}/週 起
                 </p>
               </div>
             </Link>

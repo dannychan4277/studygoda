@@ -14,12 +14,12 @@ export default function HomeFeatured({ programs }) {
     >
       <div className="max-w-[1120px] mx-auto">
         <h2
-          className="font-display font-extrabold text-2xl md:text-3xl mb-2"
+          className="font-display font-bold text-[28px] mb-2"
           style={{ color: "var(--color-text)" }}
         >
           最多人看的語言學校
         </h2>
-        <p className="text-sm mb-8" style={{ color: "var(--color-text-secondary)" }}>
+        <p className="text-[14px] mb-8" style={{ color: "var(--color-text-secondary)" }}>
           綜合評價和性價比，為你精選。
         </p>
 
