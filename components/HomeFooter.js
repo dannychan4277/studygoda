@@ -12,7 +12,7 @@ export default function HomeFooter() {
         <h2 className="font-display font-bold text-[28px] md:text-[36px] mb-4">
           準備好出發了嗎？
         </h2>
-        <p className="text-base md:text-lg opacity-80 mb-8 max-w-xl mx-auto" style={{ lineHeight: 1.6 }}>
+        <p className="text-base md:text-lg opacity-80 mb-8 mx-auto" style={{ maxWidth: "576px", lineHeight: 1.6 }}>
           30+ 間學校、4 個城市，找到最適合你的遊學方案。
         </p>
         <Link

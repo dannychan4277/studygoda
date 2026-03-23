@@ -11,7 +11,7 @@ export default function HomeCalculatorCTA() {
         <h2 className="font-display font-bold text-[28px] md:text-[36px] mb-4">
           算算你的遊學預算
         </h2>
-        <p className="text-base md:text-lg opacity-80 mb-8 max-w-xl mx-auto" style={{ lineHeight: 1.6 }}>
+        <p className="text-base md:text-lg opacity-80 mb-8 mx-auto" style={{ maxWidth: "576px", lineHeight: 1.6 }}>
           選學校、設週數，即時算出學費＋生活費＋機票的完整花費。
         </p>
         <Link
