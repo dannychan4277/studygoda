@@ -11,18 +11,18 @@
   --color-primary-light: #2D6A8F;
   --color-primary-dark: #0F3347;
 
-  /* Colors - Accent (vibrant orange) */
-  --color-accent: #FF6B35;
-  --color-accent-light: #FF8A5C;
-  --color-accent-dark: #E05A25;
+  /* Colors - Accent (WCAG AA compliant orange — 4.63:1 on white) */
+  --color-accent: #C74B1A;
+  --color-accent-light: #E05A25;
+  --color-accent-dark: #A33D14;
 
-  /* Colors - Neutrals (neutral, clean) */
+  /* Colors - Neutrals (neutral, clean, WCAG AA compliant) */
   --color-surface: #F5F5F5;
   --color-elevated: #FFFFFF;
   --color-sunken: #EBEBEB;
   --color-text: #1A1A1A;
-  --color-text-secondary: #6B7280;
-  --color-text-muted: #9CA3AF;
+  --color-text-secondary: #57606A;
+  --color-text-muted: #656D76;
   --color-border: #E5E7EB;
 
   /* Colors - Semantic */
@@ -34,7 +34,7 @@
   /* Fee color encoding */
   --color-fee-budget: #2D8B55;
   --color-fee-mid: #D4930D;
-  --color-fee-premium: #FF6B35;
+  --color-fee-premium: #C74B1A;
 
   /* Spacing */
   --spacing-2xs: 2px;
@@ -103,6 +103,24 @@ body {
 .bg-teal-section {
   background-color: var(--color-primary);
   color: white;
+}
+
+/* Card hover — shadow-only, no JS needed */
+.card-hover {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  transition: box-shadow 200ms ease;
+}
+.card-hover:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+/* City pill hover */
+.pill-hover {
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.pill-hover:hover {
+  background-color: var(--color-primary);
+  color: #FFFFFF;
 }
 
 /* Skeleton loading */

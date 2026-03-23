@@ -14,7 +14,7 @@ export function getFeeColorClass(weeklyFeeUsd) {
 export function getFeeColor(weeklyFeeUsd) {
   if (weeklyFeeUsd < 250) return "#2D8B55";
   if (weeklyFeeUsd <= 400) return "#D4930D";
-  return "#E07A5F";
+  return "#C74B1A";
 }
 
 /**

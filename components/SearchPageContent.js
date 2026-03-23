@@ -334,10 +334,17 @@ export default function SearchPageContent() {
 
       {/* Mobile bottom sheet filter */}
       {showFilters && (
-        <div className="fixed inset-0 z-50 lg:hidden">
+        <div
+          className="fixed inset-0 z-50 lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="篩選條件"
+          onKeyDown={(e) => { if (e.key === "Escape") setShowFilters(false); }}
+        >
           <div
             className="absolute inset-0 bg-black/40"
             onClick={() => setShowFilters(false)}
+            aria-hidden="true"
           />
           <div
             className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto p-6 pt-4"
@@ -346,9 +353,8 @@ export default function SearchPageContent() {
               borderRadius: "var(--radius-lg) var(--radius-lg) 0 0",
             }}
           >
-            {/* Handle bar */}
             <div className="flex justify-center mb-4">
-              <div className="w-10 h-1 rounded-full" style={{ backgroundColor: "var(--color-border)" }} />
+              <div className="w-10 h-1 rounded-full" style={{ backgroundColor: "var(--color-border)" }} aria-hidden="true" />
             </div>
             {filterPanel}
             <button
@@ -358,6 +364,7 @@ export default function SearchPageContent() {
                 backgroundColor: "var(--color-primary)",
                 color: "white",
               }}
+              autoFocus
             >
               套用篩選
             </button>

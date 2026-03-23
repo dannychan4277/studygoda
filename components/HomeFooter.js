@@ -76,9 +76,9 @@ export default function HomeFooter() {
                 關於
               </h4>
               <ul className="space-y-2 text-sm">
-                <li><span className="opacity-50">關於我們（即將推出）</span></li>
-                <li><span className="opacity-50">聯絡我們（即將推出）</span></li>
-                <li><span className="opacity-50">隱私政策（即將推出）</span></li>
+                <li><a href="#" aria-disabled="true" className="opacity-50 pointer-events-none">關於我們</a></li>
+                <li><a href="#" aria-disabled="true" className="opacity-50 pointer-events-none">聯絡我們</a></li>
+                <li><a href="#" aria-disabled="true" className="opacity-50 pointer-events-none">隱私政策</a></li>
               </ul>
             </div>
           </div>

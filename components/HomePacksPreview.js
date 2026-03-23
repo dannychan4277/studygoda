@@ -18,7 +18,7 @@ export default async function HomePacksPreview() {
   return (
     <AnimatedSection
       className="py-12 md:py-16 px-6"
-      style={{ backgroundColor: "#FFFFFF" }}
+      style={{ backgroundColor: "var(--color-elevated)" }}
     >
       <div className="max-w-[1120px] mx-auto">
         <div className="flex items-end justify-between mb-8">

@@ -81,18 +81,10 @@ export default function LazyPackCard({ pack, variant = "default" }) {
   return (
     <Link
       href={programSlug ? `/program/${programSlug}` : "/packs"}
-      className={className}
+      className={`${className} card-hover`}
       style={{
         borderRadius: "16px",
         backgroundColor: "var(--color-elevated)",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-        transition: "box-shadow 200ms ease",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.12)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
       }}
     >
       {content}

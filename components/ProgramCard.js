@@ -10,18 +10,10 @@ export default function ProgramCard({ program }) {
   return (
     <Link
       href={`/program/${program.slug}`}
-      className="block overflow-hidden"
+      className="block overflow-hidden card-hover"
       style={{
         borderRadius: "16px",
         backgroundColor: "var(--color-elevated)",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-        transition: "box-shadow 200ms ease",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.12)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
       }}
     >
       {/* Photo */}
@@ -43,16 +35,16 @@ export default function ProgramCard({ program }) {
         {/* Tags overlay */}
         <div className="absolute top-3 left-3 flex gap-1.5 flex-wrap">
           {program.google_rating > 0 && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-white rounded-full" style={{ backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}>
+            <span className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-white rounded-full" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
               ★ {program.google_rating}
             </span>
           )}
           {program.accommodation && (
-            <span className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-white rounded-full" style={{ backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}>
+            <span className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-white rounded-full" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
               🏠 {program.accommodation.includes("含") ? "住宿含" : "住宿另計"}
             </span>
           )}
-          <span className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-white rounded-full" style={{ backgroundColor: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}>
+          <span className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-white rounded-full" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
             📍 {program.city}
           </span>
         </div>

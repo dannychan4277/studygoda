@@ -17,7 +17,7 @@ export default function HomeCities({ cityStats }) {
   if (!cityStats || cityStats.length === 0) return null;
 
   return (
-    <AnimatedSection className="py-12 md:py-16 px-6" style={{ backgroundColor: "#FFFFFF" }}>
+    <AnimatedSection className="py-12 md:py-16 px-6" style={{ backgroundColor: "var(--color-elevated)" }}>
       <div className="max-w-[1120px] mx-auto">
         <h2
           className="font-display font-bold text-[28px] mb-2"
@@ -34,18 +34,10 @@ export default function HomeCities({ cityStats }) {
             <Link
               key={cs.city}
               href={`/search?city=${cs.city}`}
-              className="group block overflow-hidden"
+              className="group block overflow-hidden card-hover"
               style={{
                 borderRadius: "16px",
                 backgroundColor: "var(--color-elevated)",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-                transition: "box-shadow 200ms ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.12)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
               }}
             >
               {/* Photo above — NOT overlaid */}

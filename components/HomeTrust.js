@@ -26,7 +26,7 @@ const TESTIMONIALS = [
 
 export default function HomeTrust() {
   return (
-    <AnimatedSection className="py-12 md:py-16 px-6" style={{ backgroundColor: "#FFFFFF" }}>
+    <AnimatedSection className="py-12 md:py-16 px-6" style={{ backgroundColor: "var(--color-elevated)" }}>
       <div className="max-w-[1120px] mx-auto">
         <h2
           className="font-display font-bold text-[28px] mb-2"
@@ -40,36 +40,35 @@ export default function HomeTrust() {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {TESTIMONIALS.map((t) => (
-            <div
+            <blockquote
               key={t.id}
-              className="p-5"
+              className="p-5 card-hover"
               style={{
                 borderRadius: "16px",
-                backgroundColor: "var(--color-elevated)",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+                backgroundColor: "var(--color-surface)",
               }}
             >
               <p
-                className="italic text-[15px] leading-relaxed"
+                className="italic text-[15px]"
                 style={{ color: "var(--color-text)", lineHeight: 1.8 }}
               >
                 「{t.quote}」
               </p>
-              <div className="mt-4 flex items-center gap-2">
-                <span
-                  className="text-[12px] font-display font-semibold px-2.5 py-1 rounded-full"
+              <footer className="mt-4 flex items-center gap-2">
+                <cite
+                  className="text-[12px] font-display font-semibold px-2.5 py-1 rounded-full not-italic"
                   style={{
                     border: "1px solid var(--color-primary)",
                     color: "var(--color-primary)",
                   }}
                 >
                   {t.source}
-                </span>
+                </cite>
                 <span className="text-[13px]" style={{ color: "var(--color-text-muted)" }}>
                   · {t.school}
                 </span>
-              </div>
-            </div>
+              </footer>
+            </blockquote>
           ))}
         </div>
       </div>

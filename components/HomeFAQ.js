@@ -67,6 +67,7 @@ export default function HomeFAQ() {
                   className="w-full flex items-center justify-between p-4 text-left font-display font-semibold text-base"
                   style={{ color: "var(--color-text)" }}
                   aria-expanded={isOpen}
+                  aria-controls={`faq-panel-${i}`}
                 >
                   <span>{item.q}</span>
                   <span
@@ -75,20 +76,23 @@ export default function HomeFAQ() {
                       transform: isOpen ? "rotate(45deg)" : "rotate(0deg)",
                       color: "var(--color-accent)",
                     }}
+                    aria-hidden="true"
                   >
                     +
                   </span>
                 </button>
                 <div
+                  id={`faq-panel-${i}`}
+                  role="region"
                   className="overflow-hidden transition-all"
                   style={{
-                    maxHeight: isOpen ? "300px" : "0",
+                    maxHeight: isOpen ? "500px" : "0",
                     opacity: isOpen ? 1 : 0,
                     transition: "max-height 300ms ease, opacity 200ms ease",
                   }}
                 >
                   <p
-                    className="px-4 pb-4 text-sm leading-relaxed"
+                    className="px-4 pb-4 text-[14px] leading-relaxed"
                     style={{ color: "var(--color-text-secondary)" }}
                   >
                     {item.a}
