@@ -187,10 +187,10 @@ export default function SearchPageContent() {
       {/* Fee range */}
       <div>
         <label className="block text-xs font-display font-bold uppercase tracking-wider mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.06em" }}>
-          週費範圍 (USD)
+          週費範圍
         </label>
         <div className="flex items-center gap-3">
-          <span className="font-mono text-sm">${minFee}</span>
+          <span className="font-mono text-sm">NT${(minFee * 31).toLocaleString()}</span>
           <input
             type="range"
             min="0"
@@ -211,7 +211,7 @@ export default function SearchPageContent() {
             className="flex-1 accent-[var(--color-primary)]"
             aria-label="最高週費"
           />
-          <span className="font-mono text-sm">${maxFee}</span>
+          <span className="font-mono text-sm">NT${(maxFee * 31).toLocaleString()}</span>
         </div>
       </div>
 

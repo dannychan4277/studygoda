@@ -1,5 +1,5 @@
 import config from "@/config";
-import { formatUSD } from "@/libs/utils";
+import { formatWeeklyTWD } from "@/libs/utils";
 import AnimatedSection from "./AnimatedSection";
 
 export default function HomeFeeBars({ cityStats }) {
@@ -18,7 +18,7 @@ export default function HomeFeeBars({ cityStats }) {
           各城市平均週費
         </h2>
         <p className="text-[14px] mb-8" style={{ color: "var(--color-text-secondary)" }}>
-          USD 週費，含學費與住宿。
+          含學費與住宿的平均週費。
         </p>
 
         <div className="space-y-4">
@@ -50,7 +50,7 @@ export default function HomeFeeBars({ cityStats }) {
                     className="font-mono font-semibold text-[14px] w-[80px] flex-shrink-0"
                     style={{ color: isCheapest ? "var(--color-primary)" : "var(--color-text)" }}
                   >
-                    {formatUSD(cs.avgFee)}/週
+                    {formatWeeklyTWD(cs.avgFee)}
                   </span>
                 </div>
               );

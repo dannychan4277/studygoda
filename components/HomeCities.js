@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import config from "@/config";
-import { formatUSD } from "@/libs/utils";
+import { formatWeeklyTWD } from "@/libs/utils";
 import AnimatedSection from "./AnimatedSection";
 
 const CITY_PHOTOS = {
@@ -67,7 +67,7 @@ export default function HomeCities({ cityStats }) {
                   {cs.schoolCount} 間學校
                 </p>
                 <p className="font-mono font-semibold text-[14px] mt-1" style={{ color: "var(--color-text)" }}>
-                  {formatUSD(cs.avgFee)}/週 起
+                  {formatWeeklyTWD(cs.avgFee)} 起
                 </p>
               </div>
             </Link>

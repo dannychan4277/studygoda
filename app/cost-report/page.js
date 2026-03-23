@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getAllPrograms, getAllCityGuides } from "@/libs/data/programs";
-import { formatUSD } from "@/libs/utils";
+import { formatUSD, formatWeeklyTWD, formatTWD, usdToTwd } from "@/libs/utils";
 import config from "@/config";
 
 export const dynamic = "force-dynamic";
@@ -92,7 +92,7 @@ export default async function CostReportPage() {
                     }}
                   >
                     <span className="font-mono font-semibold text-sm text-white">
-                      {formatUSD(city.avgFee)}/週
+                      {formatWeeklyTWD(city.avgFee)}
                     </span>
                   </div>
                 </div>
@@ -132,19 +132,19 @@ export default async function CostReportPage() {
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span style={{ color: "var(--color-text-secondary)" }}>餐飲</span>
-                      <span className="font-mono" style={{ color: "var(--color-text)" }}>{formatUSD(guide.weekly_food_usd)}</span>
+                      <span className="font-mono" style={{ color: "var(--color-text)" }}>{formatTWD(usdToTwd(guide.weekly_food_usd))}</span>
                     </div>
                     <div className="flex justify-between">
                       <span style={{ color: "var(--color-text-secondary)" }}>交通</span>
-                      <span className="font-mono" style={{ color: "var(--color-text)" }}>{formatUSD(guide.weekly_transport_usd)}</span>
+                      <span className="font-mono" style={{ color: "var(--color-text)" }}>{formatTWD(usdToTwd(guide.weekly_transport_usd))}</span>
                     </div>
                     <div className="flex justify-between">
                       <span style={{ color: "var(--color-text-secondary)" }}>雜支/SIM</span>
-                      <span className="font-mono" style={{ color: "var(--color-text)" }}>{formatUSD(guide.weekly_misc_usd)}</span>
+                      <span className="font-mono" style={{ color: "var(--color-text)" }}>{formatTWD(usdToTwd(guide.weekly_misc_usd))}</span>
                     </div>
                     <div className="flex justify-between pt-2 mt-2 font-semibold" style={{ borderTop: "1px solid var(--color-border)" }}>
                       <span style={{ color: "var(--color-text)" }}>合計</span>
-                      <span className="font-mono" style={{ color: "var(--color-primary)" }}>{formatUSD(total)}/週</span>
+                      <span className="font-mono" style={{ color: "var(--color-primary)" }}>{formatTWD(usdToTwd(total))}/週</span>
                     </div>
                   </div>
                 </div>

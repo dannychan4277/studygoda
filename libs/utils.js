@@ -28,7 +28,24 @@ export function formatUSD(amount) {
  * Format TWD price
  */
 export function formatTWD(amount) {
-  return `NT$${amount.toLocaleString()}`;
+  return `NT$${Math.round(amount).toLocaleString()}`;
+}
+
+/**
+ * Convert USD to TWD (static rate from config)
+ */
+const USD_TO_TWD = 31;
+
+export function usdToTwd(usd) {
+  return Math.round(usd * USD_TO_TWD);
+}
+
+/**
+ * Format weekly USD fee as TWD (primary display format across the site)
+ * e.g. usdWeekly=280 → "NT$8,680/週"
+ */
+export function formatWeeklyTWD(usdWeekly) {
+  return `NT$${usdToTwd(usdWeekly).toLocaleString()}/週`;
 }
 
 /**

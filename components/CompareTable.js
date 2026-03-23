@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { getFeeColor, formatUSD } from "@/libs/utils";
+import { getFeeColor, formatUSD, formatWeeklyTWD } from "@/libs/utils";
 import config from "@/config";
 
 const RATE = config.exchangeRate.usdToTwd;
@@ -55,7 +55,7 @@ export default function CompareTable({ programs, cityGuides }) {
                   : getFeeColor(p.weekly_fee_usd),
             }}
           >
-            {formatUSD(p.weekly_fee_usd)}/週
+            {formatWeeklyTWD(p.weekly_fee_usd)}
           </span>
           {i === lowestFeeIdx && programs.length > 1 && (
             <span
@@ -138,7 +138,7 @@ export default function CompareTable({ programs, cityGuides }) {
           (guide.weekly_misc_usd || 0);
         return (
           <span className="font-mono" style={{ color: "var(--color-text)" }}>
-            {formatUSD(weekly)}/週
+            {formatWeeklyTWD(weekly)}
           </span>
         );
       },

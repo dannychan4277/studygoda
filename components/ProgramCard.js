@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { getFeeColorClass, formatUSD } from "@/libs/utils";
+import { getFeeColorClass, formatWeeklyTWD, formatUSD } from "@/libs/utils";
 
 export default function ProgramCard({ program }) {
   const feeClass = getFeeColorClass(program.weekly_fee_usd);
@@ -66,7 +66,10 @@ export default function ProgramCard({ program }) {
 
         <div className="mt-2 flex items-baseline gap-2">
           <span className={`font-mono font-semibold text-[22px] ${feeClass}`}>
-            {formatUSD(program.weekly_fee_usd)}/週
+            {formatWeeklyTWD(program.weekly_fee_usd)}
+          </span>
+          <span className="text-[12px]" style={{ color: "var(--color-text-muted)" }}>
+            ({formatUSD(program.weekly_fee_usd)})
           </span>
         </div>
 

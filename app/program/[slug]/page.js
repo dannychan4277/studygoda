@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getAllPrograms, getProgramBySlug } from "@/libs/data/programs";
-import { getFeeColorClass, formatUSD } from "@/libs/utils";
+import { getFeeColorClass, formatUSD, formatWeeklyTWD, formatTWD, usdToTwd } from "@/libs/utils";
 import TestimonialQuote from "@/components/TestimonialQuote";
 import AffiliateBlock from "@/components/AffiliateBlock";
 import LeadForm from "@/components/LeadForm";
@@ -136,9 +136,14 @@ export default async function ProgramDetailPage({ params }) {
               }}
             >
               <div className="flex items-center justify-between gap-4 mb-4">
-                <span className={`font-mono font-semibold text-[32px] ${feeClass}`}>
-                  {formatUSD(program.weekly_fee_usd)}/週
-                </span>
+                <div>
+                  <span className={`font-mono font-semibold text-[32px] ${feeClass}`}>
+                    {formatWeeklyTWD(program.weekly_fee_usd)}
+                  </span>
+                  <span className="block text-[13px] mt-1" style={{ color: "var(--color-text-muted)" }}>
+                    ({formatUSD(program.weekly_fee_usd)} USD/週)
+                  </span>
+                </div>
                 <CompareButton slug={slug} size="md" />
               </div>
 
@@ -254,19 +259,19 @@ export default async function ProgramDetailPage({ params }) {
                     <div className="flex justify-between">
                       <span style={{ color: "var(--color-text-secondary)" }}>餐飲/週</span>
                       <span className="font-mono font-medium" style={{ color: "var(--color-text)" }}>
-                        {formatUSD(cityGuide.weekly_food_usd)}
+                        {formatTWD(usdToTwd(cityGuide.weekly_food_usd))}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span style={{ color: "var(--color-text-secondary)" }}>交通/週</span>
                       <span className="font-mono font-medium" style={{ color: "var(--color-text)" }}>
-                        {formatUSD(cityGuide.weekly_transport_usd)}
+                        {formatTWD(usdToTwd(cityGuide.weekly_transport_usd))}
                       </span>
                     </div>
                     <div className="flex justify-between">
                       <span style={{ color: "var(--color-text-secondary)" }}>雜支/週</span>
                       <span className="font-mono font-medium" style={{ color: "var(--color-text)" }}>
-                        {formatUSD(cityGuide.weekly_misc_usd)}
+                        {formatTWD(usdToTwd(cityGuide.weekly_misc_usd))}
                       </span>
                     </div>
                     <div
@@ -275,7 +280,7 @@ export default async function ProgramDetailPage({ params }) {
                     >
                       <span style={{ color: "var(--color-text)" }}>合計/週</span>
                       <span className="font-mono" style={{ color: "var(--color-primary)" }}>
-                        {formatUSD(livingCostTotal)}
+                        {formatTWD(usdToTwd(livingCostTotal))}
                       </span>
                     </div>
                   </div>
