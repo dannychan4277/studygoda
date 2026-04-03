@@ -7,6 +7,7 @@ import Image from "next/image";
 import { supabase } from "@/libs/supabase";
 import config from "@/config";
 import { formatUSD, formatWeeklyTWD, getFeeColor } from "@/libs/utils";
+import { GOAL_LABELS as SHARED_GOAL_LABELS, translateGoal } from "@/libs/labels";
 
 /* ─────────────────── Constants ─────────────────── */
 
@@ -31,7 +32,6 @@ const CLIMATES = [
 ];
 
 const STEP_TITLES = [
-  "你想去哪裡？",
   "預算大概多少？",
   "想去多久？",
   "學習目標是什麼？",
@@ -39,7 +39,6 @@ const STEP_TITLES = [
 ];
 
 const STEP_SUBTITLES = [
-  "可以選多個國家",
   "每週學費預算（美元）",
   "建議至少 4 週效果較好",
   "選擇你最想上的課程類型",
@@ -72,7 +71,7 @@ const pageTransition = {
 /* ─────────────────── Matching algorithm ─────────────────── */
 
 function computeScores(schools, courses, cities, answers) {
-  const { countries, budget, goal, climate } = answers;
+  const { budget, goal, climate } = answers;
   const budgetRange = BUDGET_RANGES.find((b) => b.value === budget);
 
   return schools.map((school) => {
@@ -109,9 +108,6 @@ function computeScores(schools, courses, cities, answers) {
       ? 1.0
       : 0.0;
 
-    // Country match
-    const countryMatch = countries.includes(school.country) ? 1.0 : 0.0;
-
     // Climate match
     let climateMatch = 1.0;
     if (climate !== "any" && schoolCity?.climate) {
@@ -124,10 +120,9 @@ function computeScores(schools, courses, cities, answers) {
     }
 
     const score =
-      0.35 * budgetFit +
-      0.3 * goalMatch +
-      0.2 * countryMatch +
-      0.15 * climateMatch;
+      0.45 * budgetFit +
+      0.35 * goalMatch +
+      0.2 * climateMatch;
 
     const minPrice =
       schoolCourses.length > 0
@@ -152,7 +147,6 @@ export default function QuizWizard() {
   const [direction, setDirection] = useState(1);
 
   // Answers
-  const [countries, setCountries] = useState([]);
   const [budget, setBudget] = useState(null);
   const [duration, setDuration] = useState(null);
   const [goal, setGoal] = useState(null);
@@ -204,19 +198,18 @@ export default function QuizWizard() {
   // Current step valid?
   const canProceed = useMemo(() => {
     switch (step) {
-      case 0: return countries.length > 0;
-      case 1: return budget !== null;
-      case 2: return duration !== null;
-      case 3: return goal !== null;
-      case 4: return climate !== null;
+      case 0: return budget !== null;
+      case 1: return duration !== null;
+      case 2: return goal !== null;
+      case 3: return climate !== null;
       default: return false;
     }
-  }, [step, countries, budget, duration, goal, climate]);
+  }, [step, budget, duration, goal, climate]);
 
   // Navigate
   const goNext = useCallback(() => {
     if (!canProceed) return;
-    if (step < 4) {
+    if (step < 3) {
       setDirection(1);
       setStep((s) => s + 1);
     } else {
@@ -234,7 +227,7 @@ export default function QuizWizard() {
   // Run matching
   const runMatching = useCallback(async () => {
     setCalculating(true);
-    const answers = { countries, budget, goal, climate };
+    const answers = { budget, goal, climate };
 
     // Minimum 3s loading
     const minDelay = new Promise((r) => setTimeout(r, 3000));
@@ -261,7 +254,7 @@ export default function QuizWizard() {
           goal,
           city_preference: null,
           climate_preference: climate,
-          country_preference: countries,
+          country_preference: ["USA"],
           recommended_schools: top3.map((s) => s.id),
           recommended_json: recommendedJson,
         });
@@ -274,7 +267,7 @@ export default function QuizWizard() {
     await minDelay;
     setResults(top3);
     setCalculating(false);
-  }, [countries, budget, duration, goal, climate, schools, courses, cities]);
+  }, [budget, duration, goal, climate, schools, courses, cities]);
 
   // Keyboard navigation
   useEffect(() => {
@@ -286,15 +279,6 @@ export default function QuizWizard() {
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [canProceed, calculating, results, goNext]);
-
-  /* ─────────────────── Render helpers ─────────────────── */
-
-  // Country toggle
-  const toggleCountry = (code) => {
-    setCountries((prev) =>
-      prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code]
-    );
-  };
 
   /* ─────────────────── Loading state ─────────────────── */
 
@@ -693,16 +677,7 @@ function StepSingleSelect({ options, value, onChange }) {
   );
 }
 
-const GOAL_LABELS = {
-  "General English": "一般英語",
-  "Intensive English": "密集英語",
-  "IELTS Preparation": "IELTS 備考",
-  "TOEFL Preparation": "TOEFL 備考",
-  "Business English": "商業英語",
-  "Cambridge Preparation": "劍橋備考",
-  "Academic English": "學術英語",
-  "English for Young Learners": "青少年英語",
-};
+const GOAL_LABELS = SHARED_GOAL_LABELS;
 
 function StepGoal({ courseTypes, value, onChange }) {
   return (

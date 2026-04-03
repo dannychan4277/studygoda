@@ -77,7 +77,7 @@ body {
   font-family: var(--font-body);
   color: var(--color-text);
   background-color: #FFFFFF;
-  line-height: 1.8;
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -108,10 +108,11 @@ body {
 /* Card hover — shadow-only, no JS needed */
 .card-hover {
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  transition: box-shadow 200ms ease;
+  transition: box-shadow 200ms ease-out, transform 200ms ease-out;
 }
 .card-hover:hover {
   box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
 }
 
 /* City pill hover */
@@ -129,6 +130,37 @@ body {
   background-size: 200% 100%;
   animation: var(--animate-shimmer);
   border-radius: var(--radius-md);
+}
+
+/* FAQ panel — grid-template-rows transition (no max-height hack) */
+.faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 300ms ease;
+}
+.faq-panel[data-open="true"] {
+  grid-template-rows: 1fr;
+}
+.faq-panel > div {
+  overflow: hidden;
+}
+
+/* Carousel fade edges */
+.carousel-fade-edges {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 48px,
+    black calc(100% - 48px),
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 48px,
+    black calc(100% - 48px),
+    transparent
+  );
 }
 
 /* Focus styles for accessibility */

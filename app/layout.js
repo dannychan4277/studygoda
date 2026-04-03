@@ -1,5 +1,6 @@
 import "./globals.css";
 import BottomTabBar from "@/components/BottomTabBar";
+import DesktopNav from "@/components/DesktopNav";
 
 export const metadata = {
   title: {
@@ -45,6 +46,7 @@ export default function RootLayout({ children }) {
         <a href="#main-content" className="skip-link">
           跳到主要內容
         </a>
+        <DesktopNav />
         <main id="main-content" role="main">
           {children}
         </main>

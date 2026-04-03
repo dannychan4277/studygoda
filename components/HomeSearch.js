@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import config from "@/config";
-
-const TRENDING = ["Intensive English", "IELTS", "Business English", "Exam Prep"];
+import { TRENDING_TAGS } from "@/libs/labels";
 
 export default function HomeSearch({ schoolCount = 76 }) {
   const router = useRouter();
@@ -25,7 +24,7 @@ export default function HomeSearch({ schoolCount = 76 }) {
           {config.brand.heroTitle}
         </h1>
         <p className="mt-3 text-[15px]" style={{ color: "var(--color-text-secondary)" }}>
-          美、英、澳 {schoolCount}+ 間語言學校，透明比價、AI 配對推薦
+          {schoolCount}+ 間語言學校，透明比價、AI 配對推薦
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 relative" role="search" aria-label="搜尋學校">
@@ -67,36 +66,18 @@ export default function HomeSearch({ schoolCount = 76 }) {
           </div>
         </form>
 
-        <div className="mt-6 flex flex-wrap justify-center gap-3">
-          {config.countries.map((country) => (
-            <button
-              key={country}
-              onClick={() => router.push(`/schools?country=${country}`)}
-              className="font-display font-semibold text-[14px] px-5 py-2.5 pill-hover"
-              style={{
-                borderRadius: "9999px",
-                border: "1px solid var(--color-primary)",
-                color: "var(--color-primary)",
-                backgroundColor: "transparent",
-              }}
-            >
-              {config.countryFlags[country]} {config.countryNames[country]}
-            </button>
-          ))}
-        </div>
-
         <div className="mt-5 flex flex-wrap justify-center gap-2" aria-label="熱門搜尋">
           <span className="text-[13px]" style={{ color: "var(--color-text-muted)" }} aria-hidden="true">
             熱門：
           </span>
-          {TRENDING.map((tag) => (
+          {TRENDING_TAGS.map((tag) => (
             <button
-              key={tag}
-              onClick={() => router.push(`/schools?course_type=${encodeURIComponent(tag)}`)}
+              key={tag.value}
+              onClick={() => router.push(`/schools?course_type=${encodeURIComponent(tag.value)}`)}
               className="text-[13px] underline-offset-2 hover:underline transition-colors"
               style={{ color: "var(--color-text-secondary)" }}
             >
-              {tag}
+              {tag.label}
             </button>
           ))}
         </div>

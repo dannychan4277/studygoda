@@ -24,7 +24,7 @@ export default function HomeFeatured({ programs: schools }) {
         </p>
 
         <div
-          className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory"
+          className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory carousel-fade-edges"
           style={{ scrollbarWidth: "thin" }}
         >
           {schools.map((school) => (

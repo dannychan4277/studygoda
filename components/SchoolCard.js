@@ -3,12 +3,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { getFeeColorClass, formatWeeklyTWD, formatUSD } from "@/libs/utils";
-import config from "@/config";
-
+import { translateGoal } from "@/libs/labels";
 export default function SchoolCard({ school }) {
   const fee = school.min_price_per_week;
   const feeClass = fee ? getFeeColorClass(fee) : "";
-  const countryName = config.countryNames[school.country] || school.country;
 
   return (
     <Link
@@ -42,7 +40,7 @@ export default function SchoolCard({ school }) {
             </span>
           )}
           <span className="inline-flex items-center gap-1 px-2 py-1 text-[11px] font-medium text-white rounded-full" style={{ backgroundColor: "rgba(0,0,0,0.6)" }}>
-            {countryName} · {school.city}
+            {school.city}
           </span>
         </div>
       </div>
@@ -80,7 +78,7 @@ export default function SchoolCard({ school }) {
         <div className="mt-2 flex items-center gap-1.5 text-xs flex-wrap" style={{ color: "var(--color-text-muted)" }}>
           {school.course_types?.slice(0, 2).map((ct, i) => (
             <span key={ct}>
-              {i > 0 && " · "}{ct}
+              {i > 0 && " · "}{translateGoal(ct)}
             </span>
           ))}
           {school.duration_range && (

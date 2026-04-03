@@ -4,13 +4,20 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { supabase } from "@/libs/supabase";
 import SchoolCard from "@/components/SchoolCard";
-import config from "@/config";
 
 const SORT_OPTIONS = [
   { value: "recommended", label: "推薦排序" },
   { value: "price_asc", label: "價格低→高" },
   { value: "price_desc", label: "價格高→低" },
   { value: "name_asc", label: "名稱 A→Z" },
+];
+
+const FEE_RANGES = [
+  { value: "all", label: "全部", min: 0, max: Infinity },
+  { value: "under200", label: "< $200", min: 0, max: 200 },
+  { value: "200to350", label: "$200–350", min: 200, max: 350 },
+  { value: "350to500", label: "$350–500", min: 350, max: 500 },
+  { value: "over500", label: "$500+", min: 500, max: Infinity },
 ];
 
 function SkeletonCard() {
@@ -69,9 +76,6 @@ export default function SearchPageContent() {
   const [allCourseTypes, setAllCourseTypes] = useState([]);
 
   // Filter state from URL
-  const [selectedCountries, setSelectedCountries] = useState(
-    searchParams.get("country")?.split(",").filter(Boolean) || []
-  );
   const [selectedCities, setSelectedCities] = useState(
     searchParams.get("city")?.split(",").filter(Boolean) || []
   );
@@ -81,8 +85,9 @@ export default function SearchPageContent() {
   const [selectedBrands, setSelectedBrands] = useState(
     searchParams.get("brand")?.split(",").filter(Boolean) || []
   );
-  const [minFee, setMinFee] = useState(Number(searchParams.get("price_min")) || 0);
-  const [maxFee, setMaxFee] = useState(Number(searchParams.get("price_max")) || 800);
+  const [selectedFeeRanges, setSelectedFeeRanges] = useState(
+    searchParams.get("fee_range")?.split(",").filter(Boolean) || ["all"]
+  );
   const [sortBy, setSortBy] = useState(searchParams.get("sort") || "recommended");
 
   // Fetch all schools with courses
@@ -114,33 +119,23 @@ export default function SearchPageContent() {
     load();
   }, []);
 
-  // Available cities based on selected countries
+  // Available cities from all schools
   const availableCities = useMemo(() => {
-    const filtered = selectedCountries.length > 0
-      ? schools.filter((s) => selectedCountries.includes(s.country))
-      : schools;
-    return [...new Set(filtered.map((s) => s.city).filter(Boolean))].sort();
-  }, [schools, selectedCountries]);
-
-  // Clear invalid city selections when country changes
-  useEffect(() => {
-    if (selectedCities.length > 0) {
-      const valid = selectedCities.filter((c) => availableCities.includes(c));
-      if (valid.length !== selectedCities.length) {
-        setSelectedCities(valid);
-      }
-    }
-  }, [availableCities, selectedCities]);
+    return [...new Set(schools.map((s) => s.city).filter(Boolean))].sort();
+  }, [schools]);
 
   // Client-side filtering
   const filteredSchools = useMemo(() => {
     let result = schools.filter((s) => {
-      if (selectedCountries.length > 0 && !selectedCountries.includes(s.country)) return false;
       if (selectedCities.length > 0 && !selectedCities.includes(s.city)) return false;
       if (selectedBrands.length > 0 && !selectedBrands.includes(s.brand)) return false;
       if (selectedTypes.length > 0 && !s.course_types.some((ct) => selectedTypes.includes(ct))) return false;
-      if (s.min_price_per_week != null) {
-        if (s.min_price_per_week < minFee || s.min_price_per_week > maxFee) return false;
+      if (!selectedFeeRanges.includes("all") && s.min_price_per_week != null) {
+        const matchesAnyRange = selectedFeeRanges.some((rv) => {
+          const range = FEE_RANGES.find((r) => r.value === rv);
+          return range && s.min_price_per_week >= range.min && s.min_price_per_week <= range.max;
+        });
+        if (!matchesAnyRange) return false;
       }
       return true;
     });
@@ -166,61 +161,52 @@ export default function SearchPageContent() {
     }
 
     return result;
-  }, [schools, selectedCountries, selectedCities, selectedBrands, selectedTypes, minFee, maxFee, sortBy]);
+  }, [schools, selectedCities, selectedBrands, selectedTypes, selectedFeeRanges, sortBy]);
 
   // Sync filters to URL
   const syncUrl = useCallback(() => {
     const params = new URLSearchParams();
-    if (selectedCountries.length) params.set("country", selectedCountries.join(","));
     if (selectedCities.length) params.set("city", selectedCities.join(","));
     if (selectedTypes.length) params.set("course_type", selectedTypes.join(","));
     if (selectedBrands.length) params.set("brand", selectedBrands.join(","));
-    if (minFee > 0) params.set("price_min", minFee);
-    if (maxFee < 800) params.set("price_max", maxFee);
+    if (!selectedFeeRanges.includes("all")) params.set("fee_range", selectedFeeRanges.join(","));
     if (sortBy !== "recommended") params.set("sort", sortBy);
     const qs = params.toString();
     router.replace(`/schools${qs ? `?${qs}` : ""}`, { scroll: false });
-  }, [selectedCountries, selectedCities, selectedTypes, selectedBrands, minFee, maxFee, sortBy, router]);
+  }, [selectedCities, selectedTypes, selectedBrands, selectedFeeRanges, sortBy, router]);
 
   useEffect(() => {
     if (!loading) syncUrl();
-  }, [selectedCountries, selectedCities, selectedTypes, selectedBrands, minFee, maxFee, sortBy, loading, syncUrl]);
+  }, [selectedCities, selectedTypes, selectedBrands, selectedFeeRanges, sortBy, loading, syncUrl]);
 
   function toggle(arr, setArr, value) {
     setArr((prev) => prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]);
   }
 
   function resetFilters() {
-    setSelectedCountries([]);
     setSelectedCities([]);
     setSelectedTypes([]);
     setSelectedBrands([]);
-    setMinFee(0);
-    setMaxFee(800);
+    setSelectedFeeRanges(["all"]);
     setSortBy("recommended");
   }
 
-  const activeFilterCount = selectedCountries.length + selectedCities.length + selectedTypes.length + selectedBrands.length + (minFee > 0 ? 1 : 0) + (maxFee < 800 ? 1 : 0);
+  function toggleFeeRange(value) {
+    if (value === "all") {
+      setSelectedFeeRanges(["all"]);
+      return;
+    }
+    setSelectedFeeRanges((prev) => {
+      const without = prev.filter((v) => v !== "all" && v !== value);
+      const next = prev.includes(value) ? without : [...without, value];
+      return next.length === 0 ? ["all"] : next;
+    });
+  }
+
+  const activeFilterCount = selectedCities.length + selectedTypes.length + selectedBrands.length + (selectedFeeRanges.includes("all") ? 0 : selectedFeeRanges.length);
 
   const filterPanel = (
     <div className="space-y-6">
-      {/* Countries */}
-      <div>
-        <label className="block text-xs font-display font-bold uppercase tracking-wider mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.06em" }}>
-          國家
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {config.countries.map((country) => (
-            <FilterPill
-              key={country}
-              label={`${config.countryFlags[country]} ${config.countryNames[country]}`}
-              selected={selectedCountries.includes(country)}
-              onClick={() => toggle(selectedCountries, setSelectedCountries, country)}
-            />
-          ))}
-        </div>
-      </div>
-
       {/* Cities */}
       {availableCities.length > 0 && (
         <div>
@@ -278,34 +264,20 @@ export default function SearchPageContent() {
         </div>
       )}
 
-      {/* Fee range */}
+      {/* Fee range chips */}
       <div>
         <label className="block text-xs font-display font-bold uppercase tracking-wider mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.06em" }}>
           週費範圍 (USD)
         </label>
-        <div className="flex items-center gap-3">
-          <span className="font-mono text-sm">${minFee}</span>
-          <input
-            type="range"
-            min="0"
-            max="800"
-            step="25"
-            value={minFee}
-            onChange={(e) => setMinFee(Number(e.target.value))}
-            className="flex-1 accent-[var(--color-primary)]"
-            aria-label="最低週費"
-          />
-          <input
-            type="range"
-            min="0"
-            max="800"
-            step="25"
-            value={maxFee}
-            onChange={(e) => setMaxFee(Number(e.target.value))}
-            className="flex-1 accent-[var(--color-primary)]"
-            aria-label="最高週費"
-          />
-          <span className="font-mono text-sm">${maxFee}</span>
+        <div className="flex flex-wrap gap-2">
+          {FEE_RANGES.map((range) => (
+            <FilterPill
+              key={range.value}
+              label={range.label}
+              selected={selectedFeeRanges.includes(range.value)}
+              onClick={() => toggleFeeRange(range.value)}
+            />
+          ))}
         </div>
       </div>
 

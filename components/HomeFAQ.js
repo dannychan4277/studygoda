@@ -84,19 +84,17 @@ export default function HomeFAQ() {
                 <div
                   id={`faq-panel-${i}`}
                   role="region"
-                  className="overflow-hidden transition-all"
-                  style={{
-                    maxHeight: isOpen ? "500px" : "0",
-                    opacity: isOpen ? 1 : 0,
-                    transition: "max-height 300ms ease, opacity 200ms ease",
-                  }}
+                  className="faq-panel"
+                  data-open={isOpen}
                 >
-                  <p
-                    className="px-4 pb-4 text-[14px] leading-relaxed"
-                    style={{ color: "var(--color-text-secondary)" }}
-                  >
-                    {item.a}
-                  </p>
+                  <div>
+                    <p
+                      className="px-4 pb-4 text-[14px] leading-relaxed"
+                      style={{ color: "var(--color-text-secondary)" }}
+                    >
+                      {item.a}
+                    </p>
+                  </div>
                 </div>
               </div>
             );
