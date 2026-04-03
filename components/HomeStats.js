@@ -1,4 +1,4 @@
-import { getStats } from "@/libs/data/programs";
+import { getStats } from "@/libs/data/schools";
 import AnimatedSection from "./AnimatedSection";
 import CountUp from "./CountUp";
 

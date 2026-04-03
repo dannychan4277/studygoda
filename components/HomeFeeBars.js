@@ -3,10 +3,12 @@ import { formatWeeklyTWD } from "@/libs/utils";
 import AnimatedSection from "./AnimatedSection";
 
 export default function HomeFeeBars({ cityStats }) {
-  if (!cityStats || cityStats.length === 0) return null;
+  // cityStats is now countryStats: [{ country, schoolCount, avgFee }]
+  const stats = (cityStats || []).filter((c) => c.avgFee != null);
+  if (stats.length === 0) return null;
 
-  const maxFee = Math.max(...cityStats.map((c) => c.avgFee));
-  const minFee = Math.min(...cityStats.map((c) => c.avgFee));
+  const maxFee = Math.max(...stats.map((c) => c.avgFee));
+  const minFee = Math.min(...stats.map((c) => c.avgFee));
 
   return (
     <AnimatedSection className="py-12 md:py-16 px-6" style={{ backgroundColor: "var(--color-surface)" }}>
@@ -15,26 +17,27 @@ export default function HomeFeeBars({ cityStats }) {
           className="font-display font-bold text-[28px] mb-2"
           style={{ color: "var(--color-text)" }}
         >
-          各城市平均週費
+          各國平均週費
         </h2>
         <p className="text-[14px] mb-8" style={{ color: "var(--color-text-secondary)" }}>
-          含學費與住宿的平均週費。
+          語言學校平均週費比較。
         </p>
 
         <div className="space-y-4">
-          {cityStats
+          {stats
             .sort((a, b) => a.avgFee - b.avgFee)
             .map((cs) => {
               const pct = Math.round((cs.avgFee / maxFee) * 100);
               const isCheapest = cs.avgFee === minFee;
+              const label = config.countryNames[cs.country] || cs.country;
 
               return (
-                <div key={cs.city} className="flex items-center gap-4">
+                <div key={cs.country} className="flex items-center gap-4">
                   <span
                     className="font-display font-semibold text-[14px] w-[60px] text-right flex-shrink-0"
                     style={{ color: "var(--color-text)" }}
                   >
-                    {config.cityNames[cs.city] || cs.city}
+                    {label}
                   </span>
                   <div className="flex-1 h-[28px] rounded-full overflow-hidden" style={{ backgroundColor: "var(--color-sunken)" }}>
                     <div
@@ -47,10 +50,13 @@ export default function HomeFeeBars({ cityStats }) {
                     />
                   </div>
                   <span
-                    className="font-mono font-semibold text-[14px] w-[80px] flex-shrink-0"
+                    className="font-mono font-semibold text-[14px] w-[100px] flex-shrink-0"
                     style={{ color: isCheapest ? "var(--color-primary)" : "var(--color-text)" }}
                   >
                     {formatWeeklyTWD(cs.avgFee)}
+                  </span>
+                  <span className="text-[12px] flex-shrink-0" style={{ color: "var(--color-text-muted)" }}>
+                    {cs.schoolCount} 校
                   </span>
                 </div>
               );

@@ -3,15 +3,14 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { supabase } from "@/libs/supabase";
-import ProgramCard from "@/components/ProgramCard";
+import SchoolCard from "@/components/SchoolCard";
+import config from "@/config";
 
-const COURSE_TYPES = ["General English", "Intensive English", "IELTS", "Business English"];
-const CITIES = ["Cebu", "Baguio", "Manila", "Clark"];
 const SORT_OPTIONS = [
   { value: "recommended", label: "推薦排序" },
-  { value: "price-low", label: "價格低→高" },
-  { value: "price-high", label: "價格高→低" },
-  { value: "rating", label: "評價最高" },
+  { value: "price_asc", label: "價格低→高" },
+  { value: "price_desc", label: "價格高→低" },
+  { value: "name_asc", label: "名稱 A→Z" },
 ];
 
 function SkeletonCard() {
@@ -27,43 +26,87 @@ function SkeletonCard() {
   );
 }
 
+function FilterPill({ label, selected, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="px-3 py-1.5 text-sm font-display font-medium rounded-full transition-colors min-h-[44px] flex items-center"
+      style={{
+        backgroundColor: selected ? "var(--color-primary)" : "var(--color-sunken)",
+        color: selected ? "white" : "var(--color-text)",
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
+function attachMinPrice(school) {
+  const courses = school.courses || [];
+  const prices = courses.map((c) => c.price_per_week_usd).filter(Boolean);
+  const courseTypes = [...new Set(courses.map((c) => c.course_type).filter(Boolean))];
+  const minWeeks = courses.length > 0 ? Math.min(...courses.map((c) => c.min_weeks || 1)) : null;
+  const maxWeeks = courses.length > 0 ? Math.max(...courses.map((c) => c.max_weeks || 52)) : null;
+
+  return {
+    ...school,
+    min_price_per_week: prices.length > 0 ? Math.min(...prices) : null,
+    course_types: courseTypes,
+    duration_range: minWeeks && maxWeeks ? `${minWeeks}–${maxWeeks}` : null,
+  };
+}
+
 export default function SearchPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [programs, setPrograms] = useState([]);
+  const [schools, setSchools] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
 
+  // Dynamic filter options (derived from data)
+  const [allBrands, setAllBrands] = useState([]);
+  const [allCourseTypes, setAllCourseTypes] = useState([]);
+
   // Filter state from URL
+  const [selectedCountries, setSelectedCountries] = useState(
+    searchParams.get("country")?.split(",").filter(Boolean) || []
+  );
   const [selectedCities, setSelectedCities] = useState(
     searchParams.get("city")?.split(",").filter(Boolean) || []
   );
   const [selectedTypes, setSelectedTypes] = useState(
-    searchParams.get("type")?.split(",").filter(Boolean) || []
+    searchParams.get("course_type")?.split(",").filter(Boolean) || []
   );
-  const [minFee, setMinFee] = useState(Number(searchParams.get("minFee")) || 0);
-  const [maxFee, setMaxFee] = useState(Number(searchParams.get("maxFee")) || 500);
+  const [selectedBrands, setSelectedBrands] = useState(
+    searchParams.get("brand")?.split(",").filter(Boolean) || []
+  );
+  const [minFee, setMinFee] = useState(Number(searchParams.get("price_min")) || 0);
+  const [maxFee, setMaxFee] = useState(Number(searchParams.get("price_max")) || 800);
   const [sortBy, setSortBy] = useState(searchParams.get("sort") || "recommended");
 
-  // Fetch all programs once
+  // Fetch all schools with courses
   useEffect(() => {
     async function load() {
       setLoading(true);
       try {
-        if (!supabase) {
-          setPrograms([]);
-          return;
-        }
+        if (!supabase) { setSchools([]); return; }
         const { data, error } = await supabase
-          .from("programs")
-          .select("*")
-          .order("google_rating", { ascending: false });
+          .from("schools")
+          .select("*, courses(price_per_week_usd, course_type, min_weeks, max_weeks)")
+          .order("popularity_score", { ascending: false });
         if (error) throw error;
-        setPrograms(data || []);
+        const enriched = (data || []).map(attachMinPrice);
+        setSchools(enriched);
+
+        // Derive dynamic filter options
+        const brands = [...new Set(enriched.map((s) => s.brand).filter(Boolean))].sort();
+        const types = [...new Set(enriched.flatMap((s) => s.course_types))].sort();
+        setAllBrands(brands);
+        setAllCourseTypes(types);
       } catch (err) {
-        console.error("Failed to load programs:", err);
-        setPrograms([]);
+        console.error("Failed to load schools:", err);
+        setSchools([]);
       } finally {
         setLoading(false);
       }
@@ -71,131 +114,182 @@ export default function SearchPageContent() {
     load();
   }, []);
 
+  // Available cities based on selected countries
+  const availableCities = useMemo(() => {
+    const filtered = selectedCountries.length > 0
+      ? schools.filter((s) => selectedCountries.includes(s.country))
+      : schools;
+    return [...new Set(filtered.map((s) => s.city).filter(Boolean))].sort();
+  }, [schools, selectedCountries]);
+
+  // Clear invalid city selections when country changes
+  useEffect(() => {
+    if (selectedCities.length > 0) {
+      const valid = selectedCities.filter((c) => availableCities.includes(c));
+      if (valid.length !== selectedCities.length) {
+        setSelectedCities(valid);
+      }
+    }
+  }, [availableCities, selectedCities]);
+
   // Client-side filtering
-  const filteredPrograms = useMemo(() => {
-    let result = programs.filter((p) => {
-      if (selectedCities.length > 0 && !selectedCities.includes(p.city)) return false;
-      if (selectedTypes.length > 0 && !selectedTypes.includes(p.course_type)) return false;
-      if (p.weekly_fee_usd < minFee || p.weekly_fee_usd > maxFee) return false;
+  const filteredSchools = useMemo(() => {
+    let result = schools.filter((s) => {
+      if (selectedCountries.length > 0 && !selectedCountries.includes(s.country)) return false;
+      if (selectedCities.length > 0 && !selectedCities.includes(s.city)) return false;
+      if (selectedBrands.length > 0 && !selectedBrands.includes(s.brand)) return false;
+      if (selectedTypes.length > 0 && !s.course_types.some((ct) => selectedTypes.includes(ct))) return false;
+      if (s.min_price_per_week != null) {
+        if (s.min_price_per_week < minFee || s.min_price_per_week > maxFee) return false;
+      }
       return true;
     });
 
     // Sort
-    if (sortBy === "price-low") {
-      result.sort((a, b) => a.weekly_fee_usd - b.weekly_fee_usd);
-    } else if (sortBy === "price-high") {
-      result.sort((a, b) => b.weekly_fee_usd - a.weekly_fee_usd);
-    } else if (sortBy === "rating") {
-      result.sort((a, b) => (b.google_rating || 0) - (a.google_rating || 0));
+    if (sortBy === "price_asc") {
+      result.sort((a, b) => (a.min_price_per_week || 9999) - (b.min_price_per_week || 9999));
+    } else if (sortBy === "price_desc") {
+      result.sort((a, b) => (b.min_price_per_week || 0) - (a.min_price_per_week || 0));
+    } else if (sortBy === "name_asc") {
+      result.sort((a, b) => a.name.localeCompare(b.name));
     } else {
-      // Recommended: score = rating * 0.6 + (1 - normalized_fee) * 0.4
-      const fees = result.map((p) => p.weekly_fee_usd);
-      const min = Math.min(...fees);
-      const max = Math.max(...fees);
-      const range = max - min || 1;
+      // Recommended: popularity + value
+      const prices = result.map((s) => s.min_price_per_week).filter(Boolean);
+      const minP = Math.min(...prices) || 0;
+      const maxP = Math.max(...prices) || 1;
+      const range = maxP - minP || 1;
       result.sort((a, b) => {
-        const scoreA = (a.google_rating || 0) * 0.6 + (1 - (a.weekly_fee_usd - min) / range) * 0.4;
-        const scoreB = (b.google_rating || 0) * 0.6 + (1 - (b.weekly_fee_usd - min) / range) * 0.4;
+        const scoreA = (a.popularity_score || 0) * 0.6 + (1 - ((a.min_price_per_week || 300) - minP) / range) * 0.4;
+        const scoreB = (b.popularity_score || 0) * 0.6 + (1 - ((b.min_price_per_week || 300) - minP) / range) * 0.4;
         return scoreB - scoreA;
       });
     }
 
     return result;
-  }, [programs, selectedCities, selectedTypes, minFee, maxFee, sortBy]);
+  }, [schools, selectedCountries, selectedCities, selectedBrands, selectedTypes, minFee, maxFee, sortBy]);
 
   // Sync filters to URL
   const syncUrl = useCallback(() => {
     const params = new URLSearchParams();
+    if (selectedCountries.length) params.set("country", selectedCountries.join(","));
     if (selectedCities.length) params.set("city", selectedCities.join(","));
-    if (selectedTypes.length) params.set("type", selectedTypes.join(","));
-    if (minFee > 0) params.set("minFee", minFee);
-    if (maxFee < 500) params.set("maxFee", maxFee);
+    if (selectedTypes.length) params.set("course_type", selectedTypes.join(","));
+    if (selectedBrands.length) params.set("brand", selectedBrands.join(","));
+    if (minFee > 0) params.set("price_min", minFee);
+    if (maxFee < 800) params.set("price_max", maxFee);
     if (sortBy !== "recommended") params.set("sort", sortBy);
-    router.replace(`/search?${params.toString()}`, { scroll: false });
-  }, [selectedCities, selectedTypes, minFee, maxFee, sortBy, router]);
+    const qs = params.toString();
+    router.replace(`/schools${qs ? `?${qs}` : ""}`, { scroll: false });
+  }, [selectedCountries, selectedCities, selectedTypes, selectedBrands, minFee, maxFee, sortBy, router]);
 
   useEffect(() => {
     if (!loading) syncUrl();
-  }, [selectedCities, selectedTypes, minFee, maxFee, sortBy, loading, syncUrl]);
+  }, [selectedCountries, selectedCities, selectedTypes, selectedBrands, minFee, maxFee, sortBy, loading, syncUrl]);
 
-  function toggleCity(city) {
-    setSelectedCities((prev) =>
-      prev.includes(city) ? prev.filter((c) => c !== city) : [...prev, city]
-    );
-  }
-
-  function toggleType(type) {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
+  function toggle(arr, setArr, value) {
+    setArr((prev) => prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]);
   }
 
   function resetFilters() {
+    setSelectedCountries([]);
     setSelectedCities([]);
     setSelectedTypes([]);
+    setSelectedBrands([]);
     setMinFee(0);
-    setMaxFee(500);
+    setMaxFee(800);
     setSortBy("recommended");
   }
 
+  const activeFilterCount = selectedCountries.length + selectedCities.length + selectedTypes.length + selectedBrands.length + (minFee > 0 ? 1 : 0) + (maxFee < 800 ? 1 : 0);
+
   const filterPanel = (
     <div className="space-y-6">
-      {/* Cities */}
+      {/* Countries */}
       <div>
         <label className="block text-xs font-display font-bold uppercase tracking-wider mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.06em" }}>
-          城市
+          國家
         </label>
         <div className="flex flex-wrap gap-2">
-          {CITIES.map((city) => (
-            <button
-              key={city}
-              onClick={() => toggleCity(city)}
-              className="px-3 py-1.5 text-sm font-display font-medium rounded-full transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
-              style={{
-                backgroundColor: selectedCities.includes(city) ? "var(--color-primary)" : "var(--color-sunken)",
-                color: selectedCities.includes(city) ? "white" : "var(--color-text)",
-              }}
-            >
-              {city}
-            </button>
+          {config.countries.map((country) => (
+            <FilterPill
+              key={country}
+              label={`${config.countryFlags[country]} ${config.countryNames[country]}`}
+              selected={selectedCountries.includes(country)}
+              onClick={() => toggle(selectedCountries, setSelectedCountries, country)}
+            />
           ))}
         </div>
       </div>
 
-      {/* Course types */}
-      <div>
-        <label className="block text-xs font-display font-bold uppercase tracking-wider mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.06em" }}>
-          課程類型
-        </label>
-        <div className="flex flex-wrap gap-2">
-          {COURSE_TYPES.map((type) => (
-            <button
-              key={type}
-              onClick={() => toggleType(type)}
-              className="px-3 py-1.5 text-sm font-display font-medium rounded-full transition-colors min-h-[44px] flex items-center"
-              style={{
-                backgroundColor: selectedTypes.includes(type) ? "var(--color-primary)" : "var(--color-sunken)",
-                color: selectedTypes.includes(type) ? "white" : "var(--color-text)",
-              }}
-            >
-              {type}
-            </button>
-          ))}
+      {/* Cities */}
+      {availableCities.length > 0 && (
+        <div>
+          <label className="block text-xs font-display font-bold uppercase tracking-wider mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.06em" }}>
+            城市
+          </label>
+          <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+            {availableCities.map((city) => (
+              <FilterPill
+                key={city}
+                label={city}
+                selected={selectedCities.includes(city)}
+                onClick={() => toggle(selectedCities, setSelectedCities, city)}
+              />
+            ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* Course types */}
+      {allCourseTypes.length > 0 && (
+        <div>
+          <label className="block text-xs font-display font-bold uppercase tracking-wider mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.06em" }}>
+            課程類型
+          </label>
+          <div className="flex flex-wrap gap-2">
+            {allCourseTypes.map((type) => (
+              <FilterPill
+                key={type}
+                label={type}
+                selected={selectedTypes.includes(type)}
+                onClick={() => toggle(selectedTypes, setSelectedTypes, type)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Brands */}
+      {allBrands.length > 0 && (
+        <div>
+          <label className="block text-xs font-display font-bold uppercase tracking-wider mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.06em" }}>
+            品牌
+          </label>
+          <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto">
+            {allBrands.map((brand) => (
+              <FilterPill
+                key={brand}
+                label={brand}
+                selected={selectedBrands.includes(brand)}
+                onClick={() => toggle(selectedBrands, setSelectedBrands, brand)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Fee range */}
       <div>
         <label className="block text-xs font-display font-bold uppercase tracking-wider mb-2" style={{ color: "var(--color-text-muted)", letterSpacing: "0.06em" }}>
-          週費範圍
+          週費範圍 (USD)
         </label>
         <div className="flex items-center gap-3">
-          <span className="font-mono text-sm">NT${(minFee * 31).toLocaleString()}</span>
+          <span className="font-mono text-sm">${minFee}</span>
           <input
             type="range"
             min="0"
-            max="500"
-            step="10"
+            max="800"
+            step="25"
             value={minFee}
             onChange={(e) => setMinFee(Number(e.target.value))}
             className="flex-1 accent-[var(--color-primary)]"
@@ -204,14 +298,14 @@ export default function SearchPageContent() {
           <input
             type="range"
             min="0"
-            max="500"
-            step="10"
+            max="800"
+            step="25"
             value={maxFee}
             onChange={(e) => setMaxFee(Number(e.target.value))}
             className="flex-1 accent-[var(--color-primary)]"
             aria-label="最高週費"
           />
-          <span className="font-mono text-sm">NT${(maxFee * 31).toLocaleString()}</span>
+          <span className="font-mono text-sm">${maxFee}</span>
         </div>
       </div>
 
@@ -262,7 +356,7 @@ export default function SearchPageContent() {
             找到你的語言學校
           </h1>
           <p className="mt-1 text-sm" style={{ color: "var(--color-text-secondary)" }}>
-            {loading ? "載入中..." : `${filteredPrograms.length} 間學校`}
+            {loading ? "載入中..." : `${filteredSchools.length} 間學校`}
           </p>
         </div>
       </div>
@@ -291,7 +385,7 @@ export default function SearchPageContent() {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <polygon points="22,3 2,3 10,12.46 10,19 14,21 14,12.46" />
               </svg>
-              篩選
+              篩選{activeFilterCount > 0 ? ` (${activeFilterCount})` : ""}
             </button>
 
             {loading ? (
@@ -300,10 +394,8 @@ export default function SearchPageContent() {
                   <SkeletonCard key={i} />
                 ))}
               </div>
-            ) : filteredPrograms.length === 0 ? (
-              /* Empty state */
+            ) : filteredSchools.length === 0 ? (
               <div className="text-center py-16">
-                <div className="text-5xl mb-4">🔍</div>
                 <h3 className="font-display font-bold text-lg" style={{ color: "var(--color-text)" }}>
                   沒有符合條件的學校
                 </h3>
@@ -323,8 +415,8 @@ export default function SearchPageContent() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-                {filteredPrograms.map((program) => (
-                  <ProgramCard key={program.id} program={program} />
+                {filteredSchools.map((school) => (
+                  <SchoolCard key={school.id} school={school} />
                 ))}
               </div>
             )}
@@ -347,7 +439,7 @@ export default function SearchPageContent() {
             aria-hidden="true"
           />
           <div
-            className="absolute bottom-0 left-0 right-0 max-h-[70vh] overflow-y-auto p-6 pt-4"
+            className="absolute bottom-0 left-0 right-0 max-h-[80vh] overflow-y-auto p-6 pt-4"
             style={{
               backgroundColor: "var(--color-elevated)",
               borderRadius: "var(--radius-lg) var(--radius-lg) 0 0",

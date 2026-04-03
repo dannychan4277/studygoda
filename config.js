@@ -1,6 +1,6 @@
 const config = {
-  appName: "StudyGoda",
-  appDescription: "菲律賓遊學比價平台 — 找到最適合你的語言學校",
+  appName: "Studygoda",
+  appDescription: "遊學比較平台 — 美國、英國、澳洲語言學校搜尋、比較、費用計算",
   domainName: "studygoda.com",
   locale: "zh-TW",
 
@@ -8,53 +8,40 @@ const config = {
   brand: {
     tagline: "找到你的遊學",
     heroTitle: "你的第一趟\n獨立冒險",
-    heroSubtitle: "菲律賓語言學校，透明比價、真人推薦",
+    heroSubtitle: "美、英、澳語言學校，透明比價、AI 配對推薦",
   },
 
-  // Cities
-  cities: ["Cebu", "Baguio", "Manila", "Clark"],
-  cityNames: {
-    Cebu: "宿霧",
-    Baguio: "碧瑤",
-    Manila: "馬尼拉",
-    Clark: "克拉克",
+  // Countries
+  countries: ["USA", "UK", "Australia"],
+  countryNames: {
+    USA: "美國",
+    UK: "英國",
+    Australia: "澳洲",
+  },
+  countryFlags: {
+    USA: "🇺🇸",
+    UK: "🇬🇧",
+    Australia: "🇦🇺",
   },
 
-  // Fee thresholds (USD/week)
+  // Fee thresholds (USD/week) — DESIGN.md spec
   feeThresholds: {
     budget: 250, // < 250 = green
     premium: 400, // > 400 = coral
   },
 
-  // Affiliate links
-  affiliates: {
-    esim: {
-      name: "Airalo eSIM",
-      url: "https://ref.airalo.com/studygoda",
-      price: "NT$120-300",
-      description: "菲律賓上網 eSIM，落地即用",
-    },
-    insurance: {
-      name: "旅平險",
-      url: "#",
-      price: "NT$500-1,500/月",
-      description: "海外遊學旅平險推薦",
-    },
-  },
-
-  // Flight estimates (static TWD ranges)
+  // Flight estimates (per-country defaults, TWD)
   flights: {
-    range: "NT$4,000 – NT$8,000",
-    note: "台北直飛宿霧/馬尼拉來回",
-    skyscannerUrl:
-      "https://www.skyscanner.com.tw/transport/flights/tpe/ceb/",
+    USA: { range: "NT$25,000 – NT$45,000", note: "台北出發來回" },
+    UK: { range: "NT$28,000 – NT$50,000", note: "台北出發來回" },
+    Australia: { range: "NT$20,000 – NT$40,000", note: "台北出發來回" },
   },
 
-  // Exchange rate (static, no external API dependency)
+  // Exchange rate (fallback — prefer exchange_rates table)
   exchangeRate: {
     usdToTwd: 31,
-    disclaimer: "參考匯率",
-    updatedAt: "2026-03-22",
+    disclaimer: "參考匯率，實際匯率以銀行為準",
+    updatedAt: "2026-04-03",
   },
 
   // Compare feature
@@ -64,8 +51,8 @@ const config = {
 
   // Resend email config
   resend: {
-    fromNoReply: "StudyGoda <noreply@studygoda.com>",
-    fromAdmin: "StudyGoda <hello@studygoda.com>",
+    fromNoReply: "Studygoda <noreply@studygoda.com>",
+    fromAdmin: "Studygoda <hello@studygoda.com>",
   },
 
   // LINE notification config
@@ -77,9 +64,9 @@ const config = {
   nav: {
     tabs: [
       { label: "首頁", href: "/", icon: "home" },
-      { label: "搜尋", href: "/search", icon: "search" },
-      { label: "懶人包", href: "/packs", icon: "package" },
-      { label: "費用", href: "/cost-report", icon: "dollar" },
+      { label: "搜尋", href: "/schools", icon: "search" },
+      { label: "測驗", href: "/quiz", icon: "sparkles" },
+      { label: "計算", href: "/calculator", icon: "calculator" },
     ],
   },
 };

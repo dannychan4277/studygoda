@@ -11,6 +11,9 @@ export const metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://studygoda.com"
   ),
+  alternates: {
+    canonical: process.env.NEXT_PUBLIC_SITE_URL || "https://studygoda.com",
+  },
   openGraph: {
     type: "website",
     locale: "zh_TW",

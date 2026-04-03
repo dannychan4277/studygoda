@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, useCallback } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import CompareTable from "@/components/CompareTable";
 import Link from "next/link";
 import { getSupabase } from "@/libs/supabase";
+import { useCompareList } from "@/libs/useCompareList";
 
 export default function CompareContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const idsParam = searchParams.get("ids") || "";
   const slugs = idsParam
     .split(",")
@@ -15,8 +17,9 @@ export default function CompareContent() {
     .filter(Boolean)
     .slice(0, 3);
 
-  const [programs, setPrograms] = useState([]);
-  const [cityGuides, setCityGuides] = useState([]);
+  const { add, remove, has, isFull } = useCompareList();
+
+  const [schools, setSchools] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,38 +35,75 @@ export default function CompareContent() {
         return;
       }
 
-      const { data: progs } = await supabase
-        .from("programs")
+      // Fetch schools by slug
+      const { data: schoolRows } = await supabase
+        .from("schools")
         .select("*")
         .in("slug", slugs);
 
-      if (progs && progs.length > 0) {
-        // Sort by the order of slugs in URL
-        const sorted = slugs
-          .map((slug) => progs.find((p) => p.slug === slug))
-          .filter(Boolean);
-        setPrograms(sorted);
-
-        const cities = [...new Set(sorted.map((p) => p.city))];
-        const { data: guides } = await supabase
-          .from("city_guides")
-          .select("*")
-          .in("city", cities);
-        setCityGuides(guides || []);
+      if (!schoolRows || schoolRows.length === 0) {
+        setLoading(false);
+        return;
       }
 
+      // Sort by the order of slugs in URL
+      const sorted = slugs
+        .map((slug) => schoolRows.find((s) => s.slug === slug))
+        .filter(Boolean);
+
+      // Fetch courses for these schools
+      const schoolIds = sorted.map((s) => s.id);
+      const { data: courseRows } = await supabase
+        .from("courses")
+        .select("*")
+        .in("school_id", schoolIds);
+
+      // Attach courses to each school
+      const schoolsWithCourses = sorted.map((school) => ({
+        ...school,
+        courses: (courseRows || []).filter((c) => c.school_id === school.id),
+      }));
+
+      setSchools(schoolsWithCourses);
       setLoading(false);
     }
 
     fetchData();
   }, [idsParam]);
 
+  // Add a school to compare (updates URL)
+  const handleAddSchool = useCallback(
+    (slug) => {
+      if (slugs.length >= 3) return;
+      const newSlugs = [...slugs, slug];
+      add(slug);
+      router.replace(`/compare?ids=${newSlugs.join(",")}`, { scroll: false });
+    },
+    [slugs, add, router]
+  );
+
+  // Remove a school from compare (updates URL)
+  const handleRemoveSchool = useCallback(
+    (slug) => {
+      const newSlugs = slugs.filter((s) => s !== slug);
+      remove(slug);
+      if (newSlugs.length === 0) {
+        router.replace("/compare", { scroll: false });
+      } else {
+        router.replace(`/compare?ids=${newSlugs.join(",")}`, {
+          scroll: false,
+        });
+      }
+    },
+    [slugs, remove, router]
+  );
+
   if (loading) {
     return <div className="skeleton" style={{ height: 400, width: "100%" }} />;
   }
 
-  // Empty state
-  if (slugs.length === 0 || programs.length === 0) {
+  // Empty state (5.6)
+  if (slugs.length === 0 || schools.length === 0) {
     return (
       <div
         className="text-center py-20 px-4"
@@ -83,7 +123,7 @@ export default function CompareContent() {
           在搜尋頁點「+ 比較」加入學校，最多可比較 3 間
         </p>
         <Link
-          href="/search"
+          href="/schools"
           className="inline-flex items-center px-6 py-3 font-display font-semibold text-sm min-h-[44px]"
           style={{
             borderRadius: "var(--radius-md)",
@@ -91,11 +131,18 @@ export default function CompareContent() {
             color: "white",
           }}
         >
-          前往搜尋
+          前往搜尋學校
         </Link>
       </div>
     );
   }
 
-  return <CompareTable programs={programs} cityGuides={cityGuides} />;
+  return (
+    <CompareTable
+      schools={schools}
+      currentSlugs={slugs}
+      onAddSchool={handleAddSchool}
+      onRemoveSchool={handleRemoveSchool}
+    />
+  );
 }

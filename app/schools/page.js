@@ -2,9 +2,12 @@ import { Suspense } from "react";
 import SearchPageContent from "@/components/SearchPageContent";
 
 export const metadata = {
-  title: "搜尋語言學校",
+  title: "搜尋語言學校 — Compare Fees & Programs | Studygoda",
   description:
-    "搜尋菲律賓語言學校。依城市、課程類型、週費篩選，找到最適合你的遊學方案。",
+    "搜尋美國、英國、澳洲語言學校。依國家、城市、課程類型、週費、品牌篩選，找到最適合你的遊學方案。",
+  alternates: {
+    canonical: "https://studygoda.com/schools",
+  },
 };
 
 function SearchFallback() {
@@ -34,7 +37,7 @@ function SearchFallback() {
   );
 }
 
-export default function SearchPage() {
+export default function SchoolsPage() {
   return (
     <Suspense fallback={<SearchFallback />}>
       <SearchPageContent />

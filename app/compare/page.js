@@ -2,9 +2,9 @@ import { Suspense } from "react";
 import CompareContent from "./CompareContent";
 
 export const metadata = {
-  title: "學校比較 — 並排比較語言學校",
+  title: "學校比較 — 並排比較語言學校 | Studygoda",
   description:
-    "最多 3 間菲律賓語言學校並排比較：費用、評價、課程、住宿、設施、生活費。",
+    "最多 3 間語言學校並排比較：週費、課程類型、住宿、設施一目了然。",
 };
 
 export default function ComparePage() {

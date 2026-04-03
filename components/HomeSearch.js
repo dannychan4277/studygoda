@@ -4,19 +4,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import config from "@/config";
 
-const TRENDING = ["密集英語", "IELTS", "親子遊學", "短期衝刺"];
+const TRENDING = ["Intensive English", "IELTS", "Business English", "Exam Prep"];
 
-export default function HomeSearch({ schoolCount = 31 }) {
+export default function HomeSearch({ schoolCount = 76 }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (query.trim()) {
-      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
-    } else {
-      router.push("/search");
-    }
+    router.push("/schools");
   }
 
   return (
@@ -26,10 +22,10 @@ export default function HomeSearch({ schoolCount = 31 }) {
           className="font-display font-bold text-[28px] md:text-[36px]"
           style={{ color: "var(--color-primary)", lineHeight: 1.3 }}
         >
-          找到你的遊學
+          {config.brand.heroTitle}
         </h1>
         <p className="mt-3 text-[15px]" style={{ color: "var(--color-text-secondary)" }}>
-          菲律賓 {schoolCount}+ 間語言學校，透明比價、真人推薦
+          美、英、澳 {schoolCount}+ 間語言學校，透明比價、AI 配對推薦
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 relative" role="search" aria-label="搜尋學校">
@@ -72,10 +68,10 @@ export default function HomeSearch({ schoolCount = 31 }) {
         </form>
 
         <div className="mt-6 flex flex-wrap justify-center gap-3">
-          {config.cities.map((city) => (
+          {config.countries.map((country) => (
             <button
-              key={city}
-              onClick={() => router.push(`/search?city=${city}`)}
+              key={country}
+              onClick={() => router.push(`/schools?country=${country}`)}
               className="font-display font-semibold text-[14px] px-5 py-2.5 pill-hover"
               style={{
                 borderRadius: "9999px",
@@ -84,7 +80,7 @@ export default function HomeSearch({ schoolCount = 31 }) {
                 backgroundColor: "transparent",
               }}
             >
-              {config.cityNames[city]}
+              {config.countryFlags[country]} {config.countryNames[country]}
             </button>
           ))}
         </div>
@@ -96,7 +92,7 @@ export default function HomeSearch({ schoolCount = 31 }) {
           {TRENDING.map((tag) => (
             <button
               key={tag}
-              onClick={() => router.push(`/search?q=${encodeURIComponent(tag)}`)}
+              onClick={() => router.push(`/schools?course_type=${encodeURIComponent(tag)}`)}
               className="text-[13px] underline-offset-2 hover:underline transition-colors"
               style={{ color: "var(--color-text-secondary)" }}
             >

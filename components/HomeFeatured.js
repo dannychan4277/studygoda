@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import ProgramCard from "./ProgramCard";
+import SchoolCard from "./SchoolCard";
 import AnimatedSection from "./AnimatedSection";
 
-export default function HomeFeatured({ programs }) {
-  if (!programs || programs.length === 0) return null;
+export default function HomeFeatured({ programs: schools }) {
+  if (!schools || schools.length === 0) return null;
 
   return (
     <AnimatedSection
@@ -17,30 +17,29 @@ export default function HomeFeatured({ programs }) {
           className="font-display font-bold text-[28px] mb-2"
           style={{ color: "var(--color-text)" }}
         >
-          最多人看的語言學校
+          熱門語言學校
         </h2>
         <p className="text-[14px] mb-8" style={{ color: "var(--color-text-secondary)" }}>
-          綜合評價和性價比，為你精選。
+          綜合熱度和性價比，為你精選。
         </p>
 
-        {/* Horizontal scroll on all viewports */}
         <div
           className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory"
           style={{ scrollbarWidth: "thin" }}
         >
-          {programs.map((program) => (
+          {schools.map((school) => (
             <div
-              key={program.slug}
+              key={school.slug}
               className="flex-shrink-0 w-[280px] md:w-[320px] snap-start"
             >
-              <ProgramCard program={program} />
+              <SchoolCard school={school} />
             </div>
           ))}
         </div>
 
         <div className="mt-8 text-center">
           <Link
-            href="/search"
+            href="/schools"
             className="inline-flex items-center gap-2 font-display font-semibold text-sm px-6 py-3 transition-all"
             style={{
               borderRadius: "var(--radius-full)",

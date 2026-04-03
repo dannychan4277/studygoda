@@ -16,7 +16,7 @@ export default function HomeFooter() {
           30+ 間學校、4 個城市，找到最適合你的遊學方案。
         </p>
         <Link
-          href="/search"
+          href="/schools"
           className="inline-flex items-center font-display font-semibold text-base px-8 py-4 transition-transform hover:scale-105"
           style={{
             backgroundColor: "var(--color-accent)",
@@ -43,7 +43,7 @@ export default function HomeFooter() {
                 StudyGoda
               </h3>
               <p className="text-sm">
-                找到你的遊學 — 菲律賓語言學校比價平台
+                找到你的遊學 — 語言學校比價平台
               </p>
             </div>
 
@@ -53,9 +53,9 @@ export default function HomeFooter() {
                 探索
               </h4>
               <ul className="space-y-2 text-sm">
-                <li><Link href="/search" className="hover:text-white transition-colors">搜尋學校</Link></li>
-                <li><Link href="/packs" className="hover:text-white transition-colors">懶人包</Link></li>
-                <li><Link href="/cost-report" className="hover:text-white transition-colors">費用報告</Link></li>
+                <li><Link href="/schools" className="hover:text-white transition-colors">搜尋學校</Link></li>
+                <li><Link href="/guides" className="hover:text-white transition-colors">遊學攻略</Link></li>
+                <li><Link href="/quiz" className="hover:text-white transition-colors">配對測驗</Link></li>
               </ul>
             </div>
 
@@ -77,7 +77,7 @@ export default function HomeFooter() {
               </h4>
               <ul className="space-y-2 text-sm">
                 <li><a href="#" aria-disabled="true" className="opacity-50 pointer-events-none">關於我們</a></li>
-                <li><a href="#" aria-disabled="true" className="opacity-50 pointer-events-none">聯絡我們</a></li>
+                <li><Link href="/contact" className="hover:text-white transition-colors">聯絡我們</Link></li>
                 <li><a href="#" aria-disabled="true" className="opacity-50 pointer-events-none">隱私政策</a></li>
               </ul>
             </div>
