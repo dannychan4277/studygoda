@@ -2,9 +2,9 @@ import { Suspense } from "react";
 import ContactForm from "@/components/ContactForm";
 
 export const metadata = {
-  title: "免費諮詢 — StudyGoda",
+  title: "美國遊學免費諮詢 — StudyGoda",
   description:
-    "填寫表單，我們的遊學顧問會在 24 小時內透過 LINE 聯繫你，提供免費的語言學校推薦與費用估算。",
+    "填寫表單，我們的美國遊學顧問會在 24 小時內透過 LINE 聯繫你，提供免費的語言學校推薦與費用估算。",
   alternates: {
     canonical: "https://studygoda.com/contact",
   },

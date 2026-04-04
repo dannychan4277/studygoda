@@ -29,10 +29,10 @@ export default function HomeCities({ cityStats }) {
           className="font-display font-bold text-[28px] mb-2"
           style={{ color: "var(--color-text)" }}
         >
-          探索城市
+          探索美國城市
         </h2>
         <p className="text-[14px] mb-8" style={{ color: "var(--color-text-secondary)" }}>
-          每個城市都有不同的學習氛圍和生活體驗。
+          每個城市都有不同的學習氛圍和生活體驗，找到最適合你的美國遊學城市。
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">

@@ -89,7 +89,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
         >
-          菲律賓語言學校，透明比價、真人推薦
+          美國語言學校，透明比價、AI 配對推薦
         </motion.p>
 
         <motion.div

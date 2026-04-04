@@ -117,7 +117,7 @@ export default function LeadForm({ programId, programName }) {
       }}
     >
       <h3 className="font-display font-bold text-lg" style={{ color: "var(--color-text)" }}>
-        免費諮詢
+        美國遊學免費諮詢
       </h3>
       {programName && (
         <p className="text-sm" style={{ color: "var(--color-text-secondary)" }}>
@@ -237,7 +237,7 @@ export default function LeadForm({ programId, programName }) {
             border: "1px solid var(--color-border)",
             backgroundColor: "var(--color-surface)",
           }}
-          placeholder="有什麼想問的？"
+          placeholder="想了解美國哪個城市或課程？"
           maxLength={1000}
         />
       </div>
@@ -257,7 +257,7 @@ export default function LeadForm({ programId, programName }) {
             送出中...
           </>
         ) : (
-          "免費諮詢"
+          "免費諮詢美國遊學"
         )}
       </button>
     </form>

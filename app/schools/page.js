@@ -2,9 +2,9 @@ import { Suspense } from "react";
 import SearchPageContent from "@/components/SearchPageContent";
 
 export const metadata = {
-  title: "搜尋語言學校 — Compare Fees & Programs | Studygoda",
+  title: "美國語言學校搜尋 — 比較費用與課程 | Studygoda",
   description:
-    "搜尋美國、英國、澳洲語言學校。依國家、城市、課程類型、週費、品牌篩選，找到最適合你的遊學方案。",
+    "搜尋 76+ 間美國語言學校。依城市、課程類型、週費篩選，找到最適合你的美國遊學方案。",
   alternates: {
     canonical: "https://studygoda.com/schools",
   },

@@ -2,9 +2,9 @@ import Link from "next/link";
 import { getAllGuides, GUIDE_CATEGORIES } from "@/libs/guides";
 
 export const metadata = {
-  title: "遊學攻略 — StudyGoda",
+  title: "美國遊學攻略 — StudyGoda",
   description:
-    "遊學行前準備、簽證攻略、費用預算、國家介紹等實用文章，幫你做好出發前的每一步準備。",
+    "美國遊學行前準備、F-1 簽證攻略、費用預算、城市介紹等實用文章，幫你做好出發前的每一步準備。",
   alternates: {
     canonical: "https://studygoda.com/guides",
   },
