@@ -17,14 +17,8 @@ export default function HomeSearch({ schoolCount = 76 }) {
   return (
     <section className="px-6 pt-12 pb-10 md:pt-20 md:pb-16" style={{ backgroundColor: "var(--color-elevated)" }}>
       <div className="max-w-[640px] mx-auto text-center">
-        <h1
-          className="font-display font-bold text-[28px] md:text-[36px]"
-          style={{ color: "var(--color-primary)", lineHeight: 1.3 }}
-        >
-          {config.brand.heroTitle}
-        </h1>
-        <p className="mt-3 text-[15px]" style={{ color: "var(--color-text-secondary)" }}>
-          {schoolCount}+ 間語言學校，透明比價、AI 配對推薦
+        <p className="font-display font-semibold text-[16px] md:text-[18px]" style={{ color: "var(--color-text)" }}>
+          搜尋 {schoolCount}+ 間美國語言學校
         </p>
 
         <form onSubmit={handleSubmit} className="mt-8 relative" role="search" aria-label="搜尋學校">

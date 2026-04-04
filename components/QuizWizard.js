@@ -495,7 +495,7 @@ export default function QuizWizard() {
               </h2>
               <p
                 className="mt-2 text-sm text-center"
-                style={{ color: "var(--color-text-muted)" }}
+                style={{ color: "var(--color-text-secondary)" }}
               >
                 {STEP_SUBTITLES[step]}
               </p>

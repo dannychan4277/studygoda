@@ -1,68 +1,94 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import CitySelector from "./CitySelector";
 
+const R2_BASE = "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities";
+
+const HERO_IMAGES = [
+  { src: `${R2_BASE}/new-york/1.jpg`, city: "紐約" },
+  { src: `${R2_BASE}/san-francisco/1.jpg`, city: "舊金山" },
+  { src: `${R2_BASE}/miami/1.jpg`, city: "邁阿密" },
+  { src: `${R2_BASE}/los-angeles/1.jpg`, city: "洛杉磯" },
+  { src: `${R2_BASE}/boston/1.jpg`, city: "波士頓" },
+  { src: `${R2_BASE}/honolulu/1.jpg`, city: "檀香山" },
+  { src: `${R2_BASE}/chicago/1.jpg`, city: "芝加哥" },
+  { src: `${R2_BASE}/san-diego/1.jpg`, city: "聖地牙哥" },
+];
+
+const INTERVAL = 5000;
+
 export default function HeroSection() {
-  const videoRef = useRef(null);
-  const [videoFailed, setVideoFailed] = useState(false);
+  const [current, setCurrent] = useState(0);
+  const [prev, setPrev] = useState(null);
+  const [transitioning, setTransitioning] = useState(false);
+
+  const advance = useCallback(() => {
+    setPrev(current);
+    setTransitioning(true);
+    setCurrent((c) => (c + 1) % HERO_IMAGES.length);
+    setTimeout(() => {
+      setTransitioning(false);
+      setPrev(null);
+    }, 1000);
+  }, [current]);
 
   useEffect(() => {
-    // Check if video can play, fallback to static photo
-    const video = videoRef.current;
-    if (!video) return;
+    const id = setInterval(advance, INTERVAL);
+    return () => clearInterval(id);
+  }, [advance]);
 
-    const timeout = setTimeout(() => {
-      if (video.readyState < 2) setVideoFailed(true);
-    }, 3000);
-
-    return () => clearTimeout(timeout);
-  }, []);
+  // Preload next image
+  useEffect(() => {
+    const next = (current + 1) % HERO_IMAGES.length;
+    const img = new Image();
+    img.src = HERO_IMAGES[next].src;
+  }, [current]);
 
   return (
     <section
       className="relative overflow-hidden"
-      style={{ height: "85vh", minHeight: "500px" }}
+      style={{
+        height: "clamp(400px, 65vh, 600px)",
+        minHeight: "400px",
+      }}
     >
-      {/* Video / Photo background */}
-      {!videoFailed ? (
-        <video
-          ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
-          muted
-          loop
-          playsInline
-          onError={() => setVideoFailed(true)}
-          poster="https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/hero/1.jpg"
-        >
-          {/* Video source would go here — using poster as fallback */}
-        </video>
-      ) : (
+      {/* Previous image (fading out) */}
+      {prev !== null && (
         <div
           className="absolute inset-0 w-full h-full bg-cover bg-center"
           style={{
-            backgroundImage:
-              'url("https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/hero/1.jpg")',
-            animation: "ken-burns 10s ease-in-out infinite alternate",
+            backgroundImage: `url("${HERO_IMAGES[prev].src}")`,
+            opacity: transitioning ? 0 : 1,
+            transition: "opacity 1s ease-in-out",
           }}
         />
       )}
 
-      {/* Cinematic gradient overlay */}
+      {/* Current image (fading in) */}
+      <div
+        className="absolute inset-0 w-full h-full bg-cover bg-center"
+        style={{
+          backgroundImage: `url("${HERO_IMAGES[current].src}")`,
+          opacity: transitioning ? 1 : 1,
+          transition: "opacity 1s ease-in-out",
+        }}
+      />
+
+      {/* Darkened gradient overlay — strong enough for WCAG AA on any photo */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(180deg, rgba(26,26,46,0.3) 0%, rgba(26,26,46,0.5) 40%, rgba(26,26,46,0.92) 100%)",
+            "linear-gradient(180deg, rgba(26,26,46,0.4) 0%, rgba(26,26,46,0.55) 30%, rgba(26,26,46,0.7) 60%, rgba(26,26,46,0.95) 100%)",
         }}
       />
 
       {/* Teal tint overlay */}
       <div
         className="absolute inset-0"
-        style={{ backgroundColor: "rgba(26,107,90,0.25)" }}
+        style={{ backgroundColor: "rgba(26,107,90,0.2)" }}
       />
 
       {/* Content */}
@@ -72,6 +98,7 @@ export default function HeroSection() {
           style={{
             fontSize: "clamp(2.5rem, 6vw, 4.5rem)",
             letterSpacing: "-0.04em",
+            textShadow: "0 2px 30px rgba(0,0,0,0.6)",
           }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -83,8 +110,11 @@ export default function HeroSection() {
         </motion.h1>
 
         <motion.p
-          className="font-display mt-4 text-white/80"
-          style={{ fontSize: "clamp(1rem, 2.5vw, 1.5rem)" }}
+          className="font-display mt-4 text-white/90"
+          style={{
+            fontSize: "clamp(1rem, 2.5vw, 1.5rem)",
+            textShadow: "0 1px 20px rgba(0,0,0,0.5)",
+          }}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
@@ -98,7 +128,13 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4, ease: "easeOut" }}
         >
-          <p className="text-white/60 text-sm font-display mb-4">
+          <p
+            className="text-sm font-display mb-4"
+            style={{
+              color: "rgba(255,255,255,0.7)",
+              textShadow: "0 1px 10px rgba(0,0,0,0.4)",
+            }}
+          >
             你想去哪裡？
           </p>
           <CitySelector />
