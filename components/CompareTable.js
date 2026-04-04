@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { getFeeColor, formatWeeklyTWD } from "@/libs/utils";
 import { getSupabase } from "@/libs/supabase";
-import config from "@/config";
 
 /* ─── helpers ─── */
 
@@ -135,7 +134,7 @@ function AddSchoolColumn({ currentSlugs, onAddSchool }) {
                 <Image
                   src={
                     school.photo_url ||
-                    "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=200"
+                    "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/default/1.jpg"
                   }
                   alt={school.name}
                   fill
@@ -155,7 +154,6 @@ function AddSchoolColumn({ currentSlugs, onAddSchool }) {
                   style={{ color: "var(--color-text-muted)" }}
                 >
                   {school.brand && `${school.brand} · `}
-                  {config.countryNames[school.country] || school.country},{" "}
                   {school.city}
                 </p>
               </div>
@@ -198,11 +196,10 @@ function buildRows(schools) {
       ),
     },
     {
-      label: "國家 / 城市",
+      label: "城市",
       render: (s) => (
         <span className="text-sm" style={{ color: "var(--color-text)" }}>
-          {config.countryFlags[s.country] || ""}{" "}
-          {config.countryNames[s.country] || s.country}, {s.city}
+          {s.city}
         </span>
       ),
     },
@@ -310,7 +307,7 @@ function DesktopTable({ schools, rows, currentSlugs, onAddSchool, onRemoveSchool
                   <Image
                     src={
                       s.photo_url ||
-                      "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800"
+                      "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/default/1.jpg"
                     }
                     alt={s.name}
                     fill
@@ -452,7 +449,7 @@ function MobileCards({ schools, rows, currentSlugs, onAddSchool, onRemoveSchool 
               <Image
                 src={
                   s.photo_url ||
-                  "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800"
+                  "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/default/1.jpg"
                 }
                 alt={s.name}
                 fill

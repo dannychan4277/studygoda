@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import { supabase } from "@/libs/supabase";
-import config from "@/config";
 import { formatUSD, formatWeeklyTWD, getFeeColor } from "@/libs/utils";
 import { GOAL_LABELS as SHARED_GOAL_LABELS, translateGoal } from "@/libs/labels";
 
@@ -370,7 +369,6 @@ export default function QuizWizard() {
                 onClick={() => {
                   setResults(null);
                   setStep(0);
-                  setCountries([]);
                   setBudget(null);
                   setDuration(null);
                   setGoal(null);
@@ -409,7 +407,6 @@ export default function QuizWizard() {
                 onClick={() => {
                   setResults(null);
                   setStep(0);
-                  setCountries([]);
                   setBudget(null);
                   setDuration(null);
                   setGoal(null);
@@ -506,30 +503,27 @@ export default function QuizWizard() {
               {/* Step content */}
               <div className="mt-8">
                 {step === 0 && (
-                  <StepCountry selected={countries} onToggle={toggleCountry} />
-                )}
-                {step === 1 && (
                   <StepSingleSelect
                     options={BUDGET_RANGES}
                     value={budget}
                     onChange={setBudget}
                   />
                 )}
-                {step === 2 && (
+                {step === 1 && (
                   <StepSingleSelect
                     options={DURATIONS}
                     value={duration}
                     onChange={setDuration}
                   />
                 )}
-                {step === 3 && (
+                {step === 2 && (
                   <StepGoal
                     courseTypes={courseTypes}
                     value={goal}
                     onChange={setGoal}
                   />
                 )}
-                {step === 4 && (
+                {step === 3 && (
                   <StepSingleSelect
                     options={CLIMATES}
                     value={climate}
@@ -558,11 +552,11 @@ export default function QuizWizard() {
             cursor: canProceed ? "pointer" : "not-allowed",
           }}
         >
-          {step === 4 ? "看結果" : "下一步"}
+          {step === 3 ? "看結果" : "下一步"}
         </button>
 
         {/* Progress dots */}
-        <ProgressDots current={step} total={5} />
+        <ProgressDots current={step} total={4} />
       </div>
     </div>
   );
@@ -589,61 +583,6 @@ function ProgressDots({ current, total }) {
           }}
         />
       ))}
-    </div>
-  );
-}
-
-function StepCountry({ selected, onToggle }) {
-  return (
-    <div className="flex flex-col gap-3">
-      {config.countries.map((code) => {
-        const active = selected.includes(code);
-        return (
-          <button
-            key={code}
-            onClick={() => onToggle(code)}
-            className="flex items-center gap-4 px-5 py-4 rounded-[16px] transition-all duration-200 text-left"
-            style={{
-              border: active
-                ? "2px solid var(--color-primary)"
-                : "2px solid var(--color-border)",
-              backgroundColor: active
-                ? "rgba(26, 107, 90, 0.06)"
-                : "var(--color-elevated)",
-              minHeight: 56,
-            }}
-          >
-            <span className="text-3xl leading-none">
-              {config.countryFlags[code]}
-            </span>
-            <span
-              className="font-display font-semibold text-base"
-              style={{
-                color: active
-                  ? "var(--color-primary)"
-                  : "var(--color-text)",
-              }}
-            >
-              {config.countryNames[code]}
-            </span>
-            {active && (
-              <svg
-                className="ml-auto"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="var(--color-primary)"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="20,6 9,17 4,12" />
-              </svg>
-            )}
-          </button>
-        );
-      })}
     </div>
   );
 }
@@ -716,7 +655,6 @@ function StepGoal({ courseTypes, value, onChange }) {
 /* ─────────────────── Result card ─────────────────── */
 
 function ResultCard({ school, rank }) {
-  const countryName = config.countryNames[school.country] || school.country;
   const feeColor = school.min_price_per_week
     ? getFeeColor(school.min_price_per_week)
     : null;
@@ -732,7 +670,7 @@ function ResultCard({ school, rank }) {
         <Image
           src={
             school.photo_url ||
-            "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800"
+            "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/default/1.jpg"
           }
           alt={school.name}
           fill
@@ -777,7 +715,7 @@ function ResultCard({ school, rank }) {
           className="mt-1 text-sm"
           style={{ color: "var(--color-text-secondary)" }}
         >
-          {countryName} · {school.city}
+          {school.city}
         </p>
 
         <div className="mt-3 flex items-baseline gap-2">

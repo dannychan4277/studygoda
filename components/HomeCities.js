@@ -6,17 +6,17 @@ import { formatWeeklyTWD } from "@/libs/utils";
 import AnimatedSection from "./AnimatedSection";
 
 const CITY_PHOTOS = {
-  "New York": "https://images.unsplash.com/photo-1485738422979-f5c462d49f04?w=800",
-  "Los Angeles": "https://images.unsplash.com/photo-1534190760961-74e8c1c5c3da?w=800",
-  "San Francisco": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800",
-  "San Diego": "https://images.unsplash.com/photo-1538097304804-2a1b932466a9?w=800",
-  Boston: "https://images.unsplash.com/photo-1501979376754-1d4511be17f2?w=800",
-  Miami: "https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?w=800",
-  Chicago: "https://images.unsplash.com/photo-1494522855154-9297ac14b55f?w=800",
-  Honolulu: "https://images.unsplash.com/photo-1507876466758-bc54f384809c?w=800",
+  "New York": "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/new-york/1.jpg",
+  "Los Angeles": "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/los-angeles/1.jpg",
+  "San Francisco": "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/san-francisco/1.jpg",
+  "San Diego": "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/san-diego/1.jpg",
+  Boston: "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/boston/1.jpg",
+  Miami: "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/miami/1.jpg",
+  Chicago: "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/chicago/1.jpg",
+  Honolulu: "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/honolulu/1.jpg",
 };
 
-const DEFAULT_PHOTO = "https://images.unsplash.com/photo-1485738422979-f5c462d49f04?w=800";
+const DEFAULT_PHOTO = "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/new-york/1.jpg";
 
 export default function HomeCities({ cityStats }) {
   // cityStats: [{ city, schoolCount, avgFee }]

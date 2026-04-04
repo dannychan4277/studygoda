@@ -73,7 +73,7 @@ export default function FloatingCompareBar() {
                     <Image
                       src={
                         s.photo_url ||
-                        "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=200"
+                        "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/default/1.jpg"
                       }
                       alt={s.name}
                       fill

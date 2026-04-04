@@ -19,7 +19,7 @@ export default function ProgramCard({ program }) {
       {/* Photo */}
       <div className="relative w-full aspect-[3/2]">
         <Image
-          src={program.photo_url || "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800"}
+          src={program.photo_url || "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/default/1.jpg"}
           alt={program.name}
           fill
           className="object-cover"

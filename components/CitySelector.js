@@ -5,10 +5,11 @@ import { motion } from "framer-motion";
 import config from "@/config";
 
 const cities = [
-  { key: "Cebu", label: "宿霧", emoji: "🏖️" },
-  { key: "Baguio", label: "碧瑤", emoji: "🏔️" },
-  { key: "Manila", label: "馬尼拉", emoji: "🏙️" },
-  { key: "Clark", label: "克拉克", emoji: "🛫" },
+  { key: "New York", label: "紐約", emoji: "🗽" },
+  { key: "Los Angeles", label: "洛杉磯", emoji: "🌴" },
+  { key: "Boston", label: "波士頓", emoji: "🎓" },
+  { key: "San Diego", label: "聖地牙哥", emoji: "🏖️" },
+  { key: "San Francisco", label: "舊金山", emoji: "🌉" },
 ];
 
 export default function CitySelector() {
@@ -22,7 +23,7 @@ export default function CitySelector() {
           transition={{ delay: 0.6 + i * 0.1, duration: 0.4 }}
         >
           <Link
-            href={`/search?city=${city.key}`}
+            href={`/schools?city=${encodeURIComponent(city.key)}`}
             className="inline-flex items-center gap-2 px-5 py-3 rounded-full font-display font-semibold text-sm transition-all"
             style={{
               backgroundColor: "rgba(255,255,255,0.15)",
