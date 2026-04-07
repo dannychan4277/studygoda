@@ -3,23 +3,23 @@ import AnimatedSection from "./AnimatedSection";
 const TESTIMONIALS = [
   {
     id: 1,
-    quote: "紐約的語言學校超棒，課後直接融入城市生活練英文，4 週口說進步超多！",
+    quote: "The school in New York was amazing — after class I'd just step outside and practice English in the city. My speaking improved so much in 4 weeks!",
     source: "Dcard",
-    author: "匿名",
+    author: "Anonymous",
     school: "Kaplan New York",
   },
   {
     id: 2,
-    quote: "波士頓學術氛圍很濃，課程紮實又有趣。週末還能逛哈佛和 MIT，整個體驗值得。",
+    quote: "Boston has such a strong academic vibe. The courses were solid and fun. Visiting Harvard and MIT on weekends made the whole experience worth it.",
     source: "PTT",
-    author: "匿名",
+    author: "Anonymous",
     school: "EC English Boston",
   },
   {
     id: 3,
-    quote: "洛杉磯天氣好、同學來自世界各地。老師很有耐心，從不敢開口到能日常對話。",
+    quote: "Great weather in LA and classmates from all over the world. The teachers were so patient — I went from too shy to speak to having daily conversations.",
     source: "Dcard",
-    author: "匿名",
+    author: "Anonymous",
     school: "ELS Language Centers",
   },
 ];
@@ -91,7 +91,7 @@ export default function HomeTrust() {
                   className="italic text-[15px]"
                   style={{ color: "var(--color-text)", lineHeight: 1.7 }}
                 >
-                  「{t.quote}」
+                  &ldquo;{t.quote}&rdquo;
                 </p>
                 <footer className="mt-4 flex items-center gap-2">
                   <cite
