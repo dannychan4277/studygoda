@@ -36,26 +36,26 @@ function usdToTwd(usd) {
 }
 
 describe("Cost calculator logic", () => {
-  const cebuGuide = {
-    weekly_food_usd: 40,
-    weekly_transport_usd: 10,
-    weekly_misc_usd: 15,
-    flight_twd_min: 4000,
-    flight_twd_max: 8000,
+  const nyGuide = {
+    weekly_food_usd: 120,
+    weekly_transport_usd: 35,
+    weekly_misc_usd: 50,
+    flight_twd_min: 25000,
+    flight_twd_max: 40000,
   };
 
   test("basic calculation with city guide", () => {
     const result = calculateCosts({
       weeklyFee: 220,
       weeks: 4,
-      cityGuide: cebuGuide,
+      cityGuide: nyGuide,
     });
 
     expect(result.tuition).toBe(880); // 220 * 4
-    expect(result.livingCost).toBe(260); // (40+10+15) * 4
+    expect(result.livingCost).toBe(820); // (120+35+50) * 4
     expect(result.hasLivingCost).toBeTruthy();
-    expect(result.flightUsd).toBe(Math.round(6000 / 31)); // avg of 4000-8000 / 31
-    expect(result.total).toBe(880 + 260 + result.flightUsd);
+    expect(result.flightUsd).toBe(Math.round(32500 / 31)); // avg of 25000-40000 / 31
+    expect(result.total).toBe(880 + 820 + result.flightUsd);
   });
 
   test("no city guide — living cost N/A", () => {
@@ -82,14 +82,14 @@ describe("Cost calculator logic", () => {
     const min = calculateCosts({
       weeklyFee: 250,
       weeks: 1,
-      cityGuide: cebuGuide,
+      cityGuide: nyGuide,
     });
     expect(min.tuition).toBe(250);
 
     const max = calculateCosts({
       weeklyFee: 250,
       weeks: 24,
-      cityGuide: cebuGuide,
+      cityGuide: nyGuide,
     });
     expect(max.tuition).toBe(6000);
   });

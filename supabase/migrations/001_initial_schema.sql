@@ -11,7 +11,7 @@ CREATE TABLE programs (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   slug TEXT UNIQUE NOT NULL,
   name TEXT NOT NULL,
-  country TEXT NOT NULL DEFAULT 'Philippines',
+  country TEXT NOT NULL DEFAULT 'US',
   city TEXT NOT NULL,
   course_type TEXT NOT NULL,
   weekly_fee_usd NUMERIC NOT NULL,
@@ -31,7 +31,7 @@ CREATE TABLE programs (
 CREATE TABLE city_guides (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   city TEXT UNIQUE NOT NULL,
-  country TEXT NOT NULL DEFAULT 'Philippines',
+  country TEXT NOT NULL DEFAULT 'US',
   weekly_food_usd NUMERIC NOT NULL,
   weekly_transport_usd NUMERIC NOT NULL,
   weekly_misc_usd NUMERIC NOT NULL,

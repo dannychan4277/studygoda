@@ -4,7 +4,7 @@
 
 describe("Compare feature logic", () => {
   test("URL params parsing — extracts slugs correctly", () => {
-    const idsParam = "cebu-ev-academy,baguio-pines-main,clark-cip";
+    const idsParam = "kaplan-new-york,ec-boston,els-los-angeles";
     const slugs = idsParam
       .split(",")
       .map((s) => s.trim())
@@ -12,9 +12,9 @@ describe("Compare feature logic", () => {
       .slice(0, 3);
 
     expect(slugs).toEqual([
-      "cebu-ev-academy",
-      "baguio-pines-main",
-      "clark-cip",
+      "kaplan-new-york",
+      "ec-boston",
+      "els-los-angeles",
     ]);
   });
 

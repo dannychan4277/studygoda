@@ -3,24 +3,24 @@ import AnimatedSection from "./AnimatedSection";
 const TESTIMONIALS = [
   {
     id: 1,
-    quote: "校園超美，設施完善。4 週下來英文真的進步很多，推薦！",
+    quote: "紐約的語言學校超棒，課後直接融入城市生活練英文，4 週口說進步超多！",
     source: "Dcard",
     author: "匿名",
-    school: "EV Academy",
+    school: "Kaplan New York",
   },
   {
     id: 2,
-    quote: "碧瑤天氣涼爽很適合讀書，而且比宿霧便宜。斯巴達模式雖然累但真的有效。",
+    quote: "波士頓學術氛圍很濃，課程紮實又有趣。週末還能逛哈佛和 MIT，整個體驗值得。",
     source: "PTT",
     author: "匿名",
-    school: "PINES Main Campus",
+    school: "EC English Boston",
   },
   {
     id: 3,
-    quote: "老師很有耐心，一對一教學讓我從不敢開口到可以日常對話。CP 值超高！",
+    quote: "洛杉磯天氣好、同學來自世界各地。老師很有耐心，從不敢開口到能日常對話。",
     source: "Dcard",
     author: "匿名",
-    school: "Monol International",
+    school: "ELS Language Centers",
   },
 ];
 
