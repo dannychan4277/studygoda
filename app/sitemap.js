@@ -1,6 +1,5 @@
 import { getSupabase } from "@/libs/supabase";
-import fs from "fs";
-import path from "path";
+import { getAllGuides } from "@/libs/guides";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://studygoda.com";
 
@@ -51,25 +50,16 @@ export default async function sitemap() {
     console.warn("Sitemap: failed to fetch schools:", err.message);
   }
 
-  // Dynamic: guide pages from content/guides/*.json
+  // Dynamic: guide pages from content/guides/*.mdx
   try {
-    const guidesDir = path.join(process.cwd(), "content", "guides");
-    if (fs.existsSync(guidesDir)) {
-      const files = fs.readdirSync(guidesDir).filter((f) => f.endsWith(".json"));
-      for (const file of files) {
-        try {
-          const raw = fs.readFileSync(path.join(guidesDir, file), "utf-8");
-          const guide = JSON.parse(raw);
-          entries.push({
-            url: `${SITE_URL}/guides/${guide.slug}`,
-            lastModified: guide.updatedAt || guide.publishedAt ? new Date(guide.updatedAt || guide.publishedAt) : new Date(),
-            changeFrequency: "monthly",
-            priority: 0.6,
-          });
-        } catch {
-          // Skip malformed guide files
-        }
-      }
+    const guides = getAllGuides();
+    for (const guide of guides) {
+      entries.push({
+        url: `${SITE_URL}/guides/${guide.slug}`,
+        lastModified: guide.updatedAt || guide.publishedAt ? new Date(guide.updatedAt || guide.publishedAt) : new Date(),
+        changeFrequency: "monthly",
+        priority: 0.7,
+      });
     }
   } catch {
     // content/guides may not exist yet

@@ -1,5 +1,3 @@
-import config from "@/config";
-
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://studygoda.com";
 
 /**
@@ -19,11 +17,10 @@ export function generateSchoolMetadata(school) {
     };
   }
 
-  const countryName = config.countryNames[school.country] || school.country;
-  const title = `${school.name} — ${countryName}${school.city} | StudyGoda`;
+  const title = `${school.name} — 美國${school.city} | StudyGoda`;
   const description = school.description
     ? school.description.slice(0, 155)
-    : `${school.name} 位於${countryName}${school.city}。查看課程費用、評價與詳細資訊，在 StudyGoda 輕鬆比較遊學方案。`;
+    : `${school.name} 位於美國${school.city}。查看課程費用、評價與詳細資訊，在 StudyGoda 輕鬆比較遊學方案。`;
 
   return {
     title,
@@ -63,8 +60,6 @@ export function generateSchoolMetadata(school) {
 export function schoolJsonLd(school) {
   if (!school) return null;
 
-  const countryName = config.countryNames[school.country] || school.country;
-
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
@@ -73,11 +68,11 @@ export function schoolJsonLd(school) {
     address: {
       "@type": "PostalAddress",
       addressLocality: school.city,
-      addressCountry: school.country,
+      addressCountry: "USA",
     },
     description:
       school.description ||
-      `${school.name} 是位於${countryName}${school.city}的語言學校。`,
+      `${school.name} 是位於美國${school.city}的語言學校。`,
   };
 
   if (school.photo_url) {
@@ -150,6 +145,44 @@ export function guideArticleJsonLd(guide) {
       "@id": `${SITE_URL}/guides/${guide.slug}`,
     },
     keywords: guide.keywords?.join(", "),
+  };
+}
+
+/**
+ * JSON-LD for FAQPage schema.
+ * Extracts Q&A pairs from guide content where h2 headings contain "？"
+ */
+export function guideFaqJsonLd(guide, rawContent) {
+  if (!guide || !rawContent) return null;
+
+  const faqRegex = /^##\s+(.+？)\s*\n([\s\S]*?)(?=\n##\s|\n*$)/gm;
+  const pairs = [];
+  let match;
+
+  while ((match = faqRegex.exec(rawContent)) !== null) {
+    const question = match[1].trim();
+    const answer = match[2]
+      .replace(/<[^>]+>/g, "")
+      .replace(/[#*`\[\]()]/g, "")
+      .trim();
+    if (question && answer) {
+      pairs.push({ question, answer });
+    }
+  }
+
+  if (!pairs.length) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: pairs.map(({ question, answer }) => ({
+      "@type": "Question",
+      name: question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: answer,
+      },
+    })),
   };
 }
 

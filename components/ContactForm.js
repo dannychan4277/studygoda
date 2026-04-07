@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import config from "@/config";
+
 
 const LINE_ID_REGEX = /^[a-zA-Z0-9._-]{4,20}$/;
 
@@ -31,7 +31,7 @@ const INITIAL_FORM = {
   line_id: "",
   email: "",
   phone: "",
-  interested_countries: [],
+  interested_countries: ["USA"],
   interested_schools: [],
   budget_twd_monthly: "",
   preferred_duration: "",
@@ -75,9 +75,6 @@ export default function ContactForm() {
             const quiz = rows[0];
             setForm((prev) => ({
               ...prev,
-              interested_countries: quiz.country_preference
-                ? [quiz.country_preference]
-                : prev.interested_countries,
               interested_schools: quiz.recommended_schools || prev.interested_schools,
             }));
           }
@@ -100,9 +97,6 @@ export default function ContactForm() {
             setForm((prev) => ({
               ...prev,
               interested_schools: [...new Set([...prev.interested_schools, rows[0].id])],
-              interested_countries: rows[0].country
-                ? [...new Set([...prev.interested_countries, rows[0].country])]
-                : prev.interested_countries,
             }));
           }
         }
@@ -184,15 +178,6 @@ export default function ContactForm() {
     } finally {
       setSubmitting(false);
     }
-  }
-
-  function toggleCountry(country) {
-    setForm((prev) => ({
-      ...prev,
-      interested_countries: prev.interested_countries.includes(country)
-        ? prev.interested_countries.filter((c) => c !== country)
-        : [...prev.interested_countries, country],
-    }));
   }
 
   // 7.7: Success state
@@ -321,30 +306,6 @@ export default function ContactForm() {
           className="form-input"
           placeholder="0912-345-678"
         />
-      </FormField>
-
-      {/* Interested Countries — multi-select chips */}
-      <FormField label="有興趣的國家" hint="可複選">
-        <div className="flex flex-wrap gap-2">
-          {config.countries.map((country) => {
-            const isSelected = form.interested_countries.includes(country);
-            return (
-              <button
-                key={country}
-                type="button"
-                onClick={() => toggleCountry(country)}
-                className="px-4 py-2 rounded-full text-sm font-display font-medium transition-all"
-                style={{
-                  backgroundColor: isSelected ? "var(--color-primary)" : "var(--color-surface)",
-                  color: isSelected ? "white" : "var(--color-text)",
-                  border: `1px solid ${isSelected ? "var(--color-primary)" : "var(--color-border)"}`,
-                }}
-              >
-                {config.countryFlags[country]} {config.countryNames[country]}
-              </button>
-            );
-          })}
-        </div>
       </FormField>
 
       {/* Budget */}

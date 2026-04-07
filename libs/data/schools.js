@@ -79,27 +79,30 @@ export async function getFeaturedSchools(limit = 6) {
 }
 
 /**
- * Get per-country stats (school count + avg fee).
+ * Get per-city stats (school count + avg fee).
  */
-export async function getCountryStats() {
+export async function getCityStats() {
   const schools = await getAllSchools();
   if (!schools) return [];
 
   const map = {};
   for (const s of schools) {
-    if (!map[s.country]) map[s.country] = { country: s.country, count: 0, totalFee: 0, feeCount: 0 };
-    map[s.country].count++;
+    if (!s.city) continue;
+    if (!map[s.city]) map[s.city] = { city: s.city, count: 0, totalFee: 0, feeCount: 0 };
+    map[s.city].count++;
     if (s.min_price_per_week != null) {
-      map[s.country].totalFee += s.min_price_per_week;
-      map[s.country].feeCount++;
+      map[s.city].totalFee += s.min_price_per_week;
+      map[s.city].feeCount++;
     }
   }
 
-  return Object.values(map).map((c) => ({
-    country: c.country,
-    schoolCount: c.count,
-    avgFee: c.feeCount > 0 ? Math.round(c.totalFee / c.feeCount) : null,
-  }));
+  return Object.values(map)
+    .map((c) => ({
+      city: c.city,
+      schoolCount: c.count,
+      avgFee: c.feeCount > 0 ? Math.round(c.totalFee / c.feeCount) : null,
+    }))
+    .sort((a, b) => b.schoolCount - a.schoolCount);
 }
 
 /**
@@ -108,17 +111,15 @@ export async function getCountryStats() {
 export async function getStats() {
   const schools = await getAllSchools();
   if (!schools || schools.length === 0) {
-    return { schoolCount: 0, countryCount: 0, cityCount: 0, lowestFee: 0 };
+    return { schoolCount: 0, cityCount: 0, lowestFee: 0 };
   }
 
-  const countries = new Set(schools.map((s) => s.country));
   const cities = new Set(schools.map((s) => s.city));
   const prices = schools.map((s) => s.min_price_per_week).filter(Boolean);
   const lowestFee = prices.length > 0 ? Math.min(...prices) : 0;
 
   return {
     schoolCount: schools.length,
-    countryCount: countries.size,
     cityCount: cities.size,
     lowestFee: Math.round(lowestFee),
   };

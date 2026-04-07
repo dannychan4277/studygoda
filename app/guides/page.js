@@ -103,6 +103,7 @@ export default async function GuidesPage({ searchParams }) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {guides.map((guide) => {
               const cat = GUIDE_CATEGORIES.find((c) => c.value === guide.category);
+              const isNew = guide.publishedAt && (Date.now() - new Date(guide.publishedAt).getTime()) < 7 * 24 * 60 * 60 * 1000;
               return (
                 <Link
                   key={guide.slug}
@@ -116,18 +117,31 @@ export default async function GuidesPage({ searchParams }) {
                   }}
                 >
                   <div className="p-5">
-                    {cat && (
-                      <span
-                        className="inline-block px-2.5 py-0.5 rounded-full text-xs font-display font-medium mb-3"
-                        style={{
-                          backgroundColor: "var(--color-surface)",
-                          color: "var(--color-primary)",
-                          border: "1px solid var(--color-border)",
-                        }}
-                      >
-                        {cat.label}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2 mb-3">
+                      {cat && (
+                        <span
+                          className="inline-block px-2.5 py-0.5 rounded-full text-xs font-display font-medium"
+                          style={{
+                            backgroundColor: "var(--color-surface)",
+                            color: "var(--color-primary)",
+                            border: "1px solid var(--color-border)",
+                          }}
+                        >
+                          {cat.label}
+                        </span>
+                      )}
+                      {isNew && (
+                        <span
+                          className="inline-block px-2 py-0.5 rounded-full text-xs font-display font-semibold"
+                          style={{
+                            backgroundColor: "var(--color-accent)",
+                            color: "white",
+                          }}
+                        >
+                          NEW
+                        </span>
+                      )}
+                    </div>
                     <h2
                       className="font-display font-bold text-base mb-2 line-clamp-2"
                       style={{ color: "var(--color-text)" }}
@@ -140,12 +154,16 @@ export default async function GuidesPage({ searchParams }) {
                     >
                       {guide.summary}
                     </p>
-                    <p
-                      className="text-xs mt-3"
-                      style={{ color: "var(--color-text-muted)" }}
-                    >
-                      {guide.publishedAt}
-                    </p>
+                    <div className="flex items-center gap-3 mt-3">
+                      <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                        {guide.publishedAt}
+                      </span>
+                      {guide.readTime && (
+                        <span className="text-xs" style={{ color: "var(--color-text-muted)" }}>
+                          {guide.readTime} 分鐘
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </Link>
               );

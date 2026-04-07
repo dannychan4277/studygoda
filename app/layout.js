@@ -1,4 +1,5 @@
 import "./globals.css";
+import Script from "next/script";
 import BottomTabBar from "@/components/BottomTabBar";
 import DesktopNav from "@/components/DesktopNav";
 
@@ -43,6 +44,18 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-HB7ZVXF23H"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-HB7ZVXF23H');
+          `}
+        </Script>
         <a href="#main-content" className="skip-link">
           跳到主要內容
         </a>

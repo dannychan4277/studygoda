@@ -33,7 +33,6 @@ export default function CostCalculator() {
   const [courses, setCourses] = useState([]);
 
   // ── Selection state ──────────────────────────────────────────────────────
-  const [selectedCountry, setSelectedCountry] = useState(searchParams.get("country") || "");
   const [selectedCity, setSelectedCity] = useState(searchParams.get("city") || "");
   const [selectedSchool, setSelectedSchool] = useState(searchParams.get("school") || "");
   const [selectedCourse, setSelectedCourse] = useState(searchParams.get("course") || "");
@@ -77,16 +76,10 @@ export default function CostCalculator() {
       .catch(() => setLoadingCities(false));
   }, []);
 
-  // ── Derived: countries from cities ───────────────────────────────────────
-  const countryOptions = useMemo(() => {
-    const set = new Set(cities.map((c) => c.country));
-    return [...set].sort();
-  }, [cities]);
-
-  // ── Derived: cities filtered by country ──────────────────────────────────
+  // ── Derived: US cities ────────────────────────────────────────────────────
   const filteredCities = useMemo(
-    () => (selectedCountry ? cities.filter((c) => c.country === selectedCountry) : []),
-    [cities, selectedCountry]
+    () => cities.filter((c) => c.country === "USA"),
+    [cities]
   );
 
   // ── Fetch schools when city changes ──────────────────────────────────────
@@ -216,7 +209,6 @@ export default function CostCalculator() {
   useEffect(() => {
     if (!courseData) return;
     const params = new URLSearchParams();
-    if (selectedCountry) params.set("country", selectedCountry);
     if (selectedCity) params.set("city", selectedCity);
     if (selectedSchool) params.set("school", selectedSchool);
     if (selectedCourse) params.set("course", selectedCourse);
@@ -224,16 +216,9 @@ export default function CostCalculator() {
     params.set("accom", accomType);
     const newUrl = `/calculator?${params.toString()}`;
     router.replace(newUrl, { scroll: false });
-  }, [selectedCountry, selectedCity, selectedSchool, selectedCourse, effectiveWeeks, accomType, courseData, router]);
+  }, [selectedCity, selectedSchool, selectedCourse, effectiveWeeks, accomType, courseData, router]);
 
   // ── Cascade handlers ─────────────────────────────────────────────────────
-  function handleCountryChange(val) {
-    setSelectedCountry(val);
-    setSelectedCity("");
-    setSelectedSchool("");
-    setSelectedCourse("");
-  }
-
   function handleCityChange(val) {
     setSelectedCity(val);
     setSelectedSchool("");
@@ -281,24 +266,6 @@ export default function CostCalculator() {
           border: "1px solid var(--color-border)",
         }}
       >
-        {/* Country */}
-        <SelectorLabel label="國家">
-          <select
-            value={selectedCountry}
-            onChange={(e) => handleCountryChange(e.target.value)}
-            className="w-full px-4 py-3 text-base"
-            style={selectStyle}
-            disabled={loadingCities}
-          >
-            <option value="">選擇國家</option>
-            {countryOptions.map((c) => (
-              <option key={c} value={c}>
-                {config.countryFlags[c] || ""} {config.countryNames[c] || c}
-              </option>
-            ))}
-          </select>
-        </SelectorLabel>
-
         {/* City */}
         <SelectorLabel label="城市">
           <select
@@ -306,9 +273,9 @@ export default function CostCalculator() {
             onChange={(e) => handleCityChange(e.target.value)}
             className="w-full px-4 py-3 text-base"
             style={selectStyle}
-            disabled={!selectedCountry}
+            disabled={loadingCities}
           >
-            <option value="">{selectedCountry ? "選擇城市" : "先選國家"}</option>
+            <option value="">選擇城市</option>
             {filteredCities.map((c) => (
               <option key={c.id} value={c.name}>
                 {c.name_zh || c.name}
@@ -438,7 +405,7 @@ export default function CostCalculator() {
             style={{ color: "var(--color-text-muted)" }}
           >
             <p className="text-base">
-              依序選擇國家、城市、學校、課程後<br />即時顯示費用拆解
+              依序選擇城市、學校、課程後<br />即時顯示費用拆解
             </p>
           </div>
         ) : (

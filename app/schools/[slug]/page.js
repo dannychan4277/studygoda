@@ -99,23 +99,30 @@ export default async function SchoolDetailPage({ params }) {
       />
 
       {/* Hero photo */}
-      <div className="relative w-full" style={{ height: "45vh", minHeight: "300px" }}>
-        <Image
-          src={
-            school.photo_url ||
-            "https://pub-a8259d97bc254f95981092323524064c.r2.dev/photos/cities/default/1.jpg"
-          }
-          alt={school.name}
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
-        />
+      <div className="relative w-full overflow-hidden" style={{ height: "45vh", minHeight: "300px" }}>
+        {school.photo_url ? (
+          <Image
+            src={school.photo_url}
+            alt={school.name}
+            fill
+            className="object-cover school-hero-img"
+            priority
+            sizes="100vw"
+          />
+        ) : (
+          <div
+            className="absolute inset-0"
+            style={{
+              background: "linear-gradient(135deg, #0F4D3F 0%, #1A6B5A 40%, #238C75 100%)",
+            }}
+          />
+        )}
+        {/* Gradient overlay — top vignette + bottom fade for text */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "linear-gradient(transparent 30%, rgba(26,26,46,0.92) 100%)",
+              "linear-gradient(180deg, rgba(26,26,46,0.15) 0%, transparent 25%, transparent 40%, rgba(26,26,46,0.92) 100%)",
           }}
         />
         <div className="absolute bottom-0 left-0 right-0 p-6 md:px-8">
