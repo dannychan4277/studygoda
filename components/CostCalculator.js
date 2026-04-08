@@ -78,7 +78,7 @@ export default function CostCalculator() {
 
   // ── Derived: US cities ────────────────────────────────────────────────────
   const filteredCities = useMemo(
-    () => cities.filter((c) => c.country === "USA"),
+    () => cities.filter((c) => c.country === "US"),
     [cities]
   );
 

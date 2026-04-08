@@ -31,7 +31,7 @@ const INITIAL_FORM = {
   line_id: "",
   email: "",
   phone: "",
-  interested_countries: ["USA"],
+  interested_countries: ["US"],
   interested_schools: [],
   budget_twd_monthly: "",
   preferred_duration: "",

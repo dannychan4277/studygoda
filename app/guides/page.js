@@ -1,4 +1,4 @@
-import { getAllGuides, GUIDE_CATEGORIES } from "@/libs/guides";
+import { getAllGuides, GUIDE_CATEGORIES } from "@/libs/guides-list";
 import GuidesClient from "./GuidesClient";
 
 export const metadata = {

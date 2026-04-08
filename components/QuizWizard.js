@@ -253,7 +253,7 @@ export default function QuizWizard() {
           goal,
           city_preference: null,
           climate_preference: climate,
-          country_preference: ["USA"],
+          country_preference: ["US"],
           recommended_schools: top3.map((s) => s.id),
           recommended_json: recommendedJson,
         });

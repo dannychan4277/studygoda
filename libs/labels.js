@@ -1,8 +1,16 @@
 /**
  * 共用翻譯標籤 — 所有面向用戶的英轉中對照表
+ * 支援 snake_case (DB) 和 Title Case 兩種格式
  */
 
 export const GOAL_LABELS = {
+  // snake_case (from DB)
+  general_english: "一般英語",
+  intensive_english: "密集英語",
+  exam_prep: "考試準備",
+  pathway: "升學銜接",
+  specialized: "專業課程",
+  // Title Case (legacy)
   "General English": "一般英語",
   "Intensive English": "密集英語",
   "IELTS Preparation": "雅思備考",
@@ -15,10 +23,10 @@ export const GOAL_LABELS = {
 };
 
 export const TRENDING_TAGS = [
-  { label: "密集英語", value: "Intensive English" },
-  { label: "雅思備考", value: "IELTS Preparation" },
-  { label: "商業英語", value: "Business English" },
-  { label: "考試準備", value: "Exam Prep" },
+  { label: "密集英語", value: "intensive_english" },
+  { label: "考試準備", value: "exam_prep" },
+  { label: "升學銜接", value: "pathway" },
+  { label: "專業課程", value: "specialized" },
 ];
 
 export function translateGoal(englishName) {

@@ -1,4 +1,4 @@
-import { getAllGuides } from "@/libs/guides";
+import { getAllGuides } from "@/libs/guides-list";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://studygoda.com";
 

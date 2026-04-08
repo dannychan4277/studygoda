@@ -12,12 +12,12 @@ const config = {
   },
 
   // Countries (currently US-only)
-  countries: ["USA"],
+  countries: ["US"],
   countryNames: {
-    USA: "美國",
+    US: "美國",
   },
   countryFlags: {
-    USA: "🇺🇸",
+    US: "🇺🇸",
   },
 
   // Fee thresholds (USD/week) — DESIGN.md spec
