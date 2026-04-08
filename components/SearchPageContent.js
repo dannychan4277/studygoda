@@ -526,12 +526,13 @@ export default function SearchPageContent() {
           {/* Desktop filter sidebar */}
           <aside className="hidden lg:block w-[260px] flex-shrink-0">
             <div
-              className="sticky top-6 p-5"
+              className="sticky top-6 p-5 max-h-[calc(100vh-3rem)] overflow-y-auto"
               style={{
                 backgroundColor: "var(--color-elevated)",
                 borderRadius: "12px",
                 border: "1px solid var(--color-border)",
                 boxShadow: "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02)",
+                scrollbarWidth: "thin",
               }}
             >
               <div className="flex items-center justify-between mb-5">
