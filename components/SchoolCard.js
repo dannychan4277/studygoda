@@ -118,10 +118,10 @@ export default function SchoolCard({ school }) {
         <div className="mt-2 flex items-baseline gap-2">
           {fee ? (
             <>
-              <span className={`font-mono font-semibold text-[22px] ${feeClass}`}>
+              <span className={`font-mono font-semibold text-[18px] ${feeClass}`}>
                 {formatWeeklyTWD(fee)}
               </span>
-              <span className="text-[12px]" style={{ color: "var(--color-text-muted)" }}>
+              <span className="text-[11px]" style={{ color: "var(--color-text-muted)" }}>
                 ({formatUSD(fee)}/wk)
               </span>
             </>
