@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node scripts/build-guides-index.mjs",
-    "build": "next build",
+    "build": "node scripts/build-guides-index.mjs && next build",
     "start": "next start",
     "lint": "next lint",
     "seed": "node scripts/seed.mjs",
