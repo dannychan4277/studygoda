@@ -61,7 +61,7 @@ export default function ProgramCard({ program }) {
             {formatWeeklyTWD(program.weekly_fee_usd)}
           </span>
           <span className="text-[12px]" style={{ color: "var(--color-text-muted)" }}>
-            ({formatUSD(program.weekly_fee_usd)})
+            ({formatUSD(program.weekly_fee_usd)}/wk)
           </span>
         </div>
 

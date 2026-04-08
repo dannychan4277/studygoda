@@ -119,10 +119,10 @@ export default function SchoolCard({ school }) {
           {fee ? (
             <>
               <span className={`font-mono font-semibold text-[22px] ${feeClass}`}>
-                {formatUSD(fee)}/wk
+                {formatWeeklyTWD(fee)}
               </span>
               <span className="text-[12px]" style={{ color: "var(--color-text-muted)" }}>
-                ({formatWeeklyTWD(fee)})
+                ({formatUSD(fee)}/wk)
               </span>
             </>
           ) : (

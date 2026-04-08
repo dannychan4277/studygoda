@@ -725,13 +725,13 @@ function ResultCard({ school, rank }) {
                 className="font-mono font-semibold text-[22px]"
                 style={{ color: feeColor }}
               >
-                {formatUSD(school.min_price_per_week)}/wk
+                {formatWeeklyTWD(school.min_price_per_week)}
               </span>
               <span
                 className="text-[12px]"
                 style={{ color: "var(--color-text-muted)" }}
               >
-                ({formatWeeklyTWD(school.min_price_per_week)})
+                ({formatUSD(school.min_price_per_week)}/wk)
               </span>
             </>
           ) : (

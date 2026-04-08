@@ -2,8 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   outputFileTracingIncludes: {
-    "/guides": ["./content/guides/**/*"],
-    "/guides/[slug]": ["./content/guides/**/*"],
+    "/guides": ["./content/**/*"],
+    "/guides/[slug]": ["./content/**/*"],
+    "/guides-sitemap.xml": ["./content/**/*"],
   },
   images: {
     remotePatterns: [
