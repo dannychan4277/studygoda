@@ -1,0 +1,37 @@
+/**
+ * Pre-build: generate content/guides-index.json from MDX frontmatter.
+ * This runs before `next build` so the guides listing page can import
+ * the JSON directly instead of reading the filesystem at runtime
+ * (which fails on Vercel serverless).
+ */
+import fs from "fs";
+import path from "path";
+import matter from "gray-matter";
+
+const dir = path.join(process.cwd(), "content", "guides");
+const outFile = path.join(process.cwd(), "content", "guides-index.json");
+
+if (!fs.existsSync(dir)) {
+  fs.writeFileSync(outFile, "[]");
+  console.log("No guides directory — wrote empty index.");
+  process.exit(0);
+}
+
+const files = fs.readdirSync(dir).filter((f) => f.endsWith(".mdx"));
+const index = [];
+
+for (const file of files) {
+  try {
+    const raw = fs.readFileSync(path.join(dir, file), "utf-8");
+    const { data, content } = matter(raw);
+    const words = content.replace(/[#\-|*>]/g, "").trim().split(/\s+/).length;
+    const readTime = Math.max(1, Math.ceil(words / 200));
+    index.push({ ...data, readTime });
+  } catch (err) {
+    console.warn(`Skipping ${file}: ${err.message}`);
+  }
+}
+
+index.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+fs.writeFileSync(outFile, JSON.stringify(index, null, 2));
+console.log(`✓ guides-index.json: ${index.length} entries`);
